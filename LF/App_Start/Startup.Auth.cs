@@ -47,16 +47,16 @@ namespace LF
 
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            //    clientId: "5eab00ca-63bd-495e-bb08-a352ff8babfe",
+            //    clientSecret: "mihHHH2zRFHiTeZfi7PURoe");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "402893966546204",
+               appSecret: "a820ff454227672c3195b75d984a3714");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
