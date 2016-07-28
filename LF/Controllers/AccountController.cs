@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LF.Models;
+using System.Collections.Generic;
+using LF.Models.DropDownListModels;
 
 namespace LF.Controllers
 {
@@ -156,7 +158,56 @@ namespace LF.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            SelectListItem country = null;
+            SelectListItem country2 = null;
+
+
+
+            SelectListItem city = null;
+            SelectListItem city2 = null;
+            SelectListItem city3 = null;
+
+
+            List<SelectListItem> countriesList = new List<SelectListItem>();
+            List<SelectListItem> regionList = new List<SelectListItem>();
+
+            List<SelectListItem> cityList = new List<SelectListItem>();
+
+            RegisterViewModel regViewModel = new RegisterViewModel();
+
+            country = new SelectListItem() { Text = "Bulgaria", Value = "922d40c3ad9542c8ac82d22fa5672391" };
+            country2 = new SelectListItem() { Text = "Greece", Value = "34786435a29f411b8f7241b405045715" };
+
+            countriesList.Add(country);
+            countriesList.Add(country2);
+
+            regViewModel.Countries = countriesList;
+            regViewModel.Regions = regionList;
+            regViewModel.Cities = cityList;
+
+            return View(regViewModel);
+        }
+
+        [AllowAnonymous]
+        public ActionResult GetRegions(string countryId)
+        {
+            RegisterDropDownListVM model = new RegisterDropDownListVM("Regions");
+            model.AddItem("Plovdiv", "6db90c57a1a9427badb5025e23ecf740");
+            model.AddItem("Sofia", "09596a7c4d2c40219795291062af527c");
+
+            return PartialView("_PartialRegisterDropDownList", model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult GetCities(string regionId)
+        {
+            RegisterDropDownListVM model = new RegisterDropDownListVM("Cities");
+
+            model.AddItem("Plovdiv", "600cbfa38cb04217b118d34580bbebf6");
+            model.AddItem("Sofia", "c29d966a5fda4f7197dc2d6f25875ca0");
+            model.AddItem("Pernik", "5619cc53db5e451684baf93ee2191a89");
+
+            return PartialView("_PartialRegisterDropDownList", model);
         }
 
         //

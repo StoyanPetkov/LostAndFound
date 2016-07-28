@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace LF.Models
 {
@@ -77,8 +79,27 @@ namespace LF.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name ="Country")]
+        public IEnumerable<SelectListItem> Countries { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Region")]
+        public IEnumerable<SelectListItem> Regions { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "City")]
+        public IEnumerable<SelectListItem> Cities { get; set; }
+
+        public Guid CountryId { get; set; }
+        public Guid RegionId { get; set; }
+        public Guid CityId { get; set; }
     }
 
     public class ResetPasswordViewModel
@@ -96,7 +117,7 @@ namespace LF.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
