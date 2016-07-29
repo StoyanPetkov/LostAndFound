@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 namespace LF.Models
 {
-    public class ExternalLoginConfirmationViewModel
+    public class ExternalLoginConfirmationViewModel : LocationModel
     {
         [Required]
         [Display(Name = "Email")]
@@ -64,7 +64,7 @@ namespace LF.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    public class RegisterViewModel : LocationModel
     {
         [Required]
         [EmailAddress]
@@ -81,25 +81,28 @@ namespace LF.Models
         [Display(Name = "Confirm password")]
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
 
-        [Required]
+    public class LocationModel
+    {
         [DataType(DataType.Text)]
-        [Display(Name ="Country")]
+        [Display(Name = "Country")]
         public IEnumerable<SelectListItem> Countries { get; set; }
 
-        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Region")]
         public IEnumerable<SelectListItem> Regions { get; set; }
 
-        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "City")]
         public IEnumerable<SelectListItem> Cities { get; set; }
 
-        public Guid CountryId { get; set; }
-        public Guid RegionId { get; set; }
-        public Guid CityId { get; set; }
+        [Required(ErrorMessage = "Country is required")]
+        public string CountryId { get; set; }
+        [Required(ErrorMessage = "Region is required")]
+        public string RegionId { get; set; }
+        [Required(ErrorMessage = "City is required")]
+        public string CityId { get; set; }
     }
 
     public class ResetPasswordViewModel

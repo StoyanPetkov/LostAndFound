@@ -174,3 +174,11 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\LostAndFound\LF\bin\Micros
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\LostAndFound\LF\obj\Debug\LF.csprojResolveAssemblyReference.cache
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\LostAndFound\LF\obj\Debug\LF.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\LostAndFound\LF\obj\Debug\LF.pdb
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.addCityIdtoAspNetUser.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csproj.GenerateResource.Cache
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.CityIdRequired.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.AddingCityRegionCountryTables.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.AddingforeignkeytoCityIdintbUser.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.AddingCategoryTable.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.AddingCategoryProperties.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.AddingItemsCommentsandmoreproperties.resources

@@ -1,4 +1,7 @@
 ﻿@model LF.Models.ExternalLoginConfirmationViewModel
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/registerView.css")" />
+
 @{
     ViewBag.Title = "Register";
 }
@@ -22,15 +25,29 @@
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            @Html.Label("Country", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+                @Html.HiddenFor(x => x.RegionId)
+                @Html.HiddenFor(x => x.CityId)
+                @Html.DropDownListFor(model => model.CountryId, Model.Countries, " --Select-- ", new { @class = "form-control", @Id = "CountriesDDL" })
+            </div>
+            <div class="RegionsDDL">
+                @Html.ValidationMessageFor(m => m.RegionId, "", new { @class = "text-danger" })
+            </div>
+            <div class="CitiesDDL">
+                @Html.ValidationMessageFor(m => m.CityId, "", new { @class = "text-danger" })
+            </div>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+            <input type="submit" class="btn btn-default" value="Register" id="submitFormBtn" />
         </div>
     </div>
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval"),
+    @Scripts.Render("~/bundles/registerBundleScript"),
 }

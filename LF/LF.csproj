@@ -191,6 +191,34 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607291022070_add CityId to AspNetUser.cs" />
+    <Compile Include="Migrations\201607291022070_add CityId to AspNetUser.Designer.cs">
+      <DependentUpon>201607291022070_add CityId to AspNetUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607291029518_CityId Required.cs" />
+    <Compile Include="Migrations\201607291029518_CityId Required.Designer.cs">
+      <DependentUpon>201607291029518_CityId Required.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607291053120_Adding CityRegionCountryTables.cs" />
+    <Compile Include="Migrations\201607291053120_Adding CityRegionCountryTables.Designer.cs">
+      <DependentUpon>201607291053120_Adding CityRegionCountryTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607291056101_Adding foreign key to CityId in tb.User.cs" />
+    <Compile Include="Migrations\201607291056101_Adding foreign key to CityId in tb.User.Designer.cs">
+      <DependentUpon>201607291056101_Adding foreign key to CityId in tb.User.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607291232299_Adding Category Table.cs" />
+    <Compile Include="Migrations\201607291232299_Adding Category Table.Designer.cs">
+      <DependentUpon>201607291232299_Adding Category Table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607291238143_Adding Category Properties.cs" />
+    <Compile Include="Migrations\201607291238143_Adding Category Properties.Designer.cs">
+      <DependentUpon>201607291238143_Adding Category Properties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607291417465_Adding ItemsComments and more properties.cs" />
+    <Compile Include="Migrations\201607291417465_Adding ItemsComments and more properties.Designer.cs">
+      <DependentUpon>201607291417465_Adding ItemsComments and more properties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BaseEntity.cs" />
@@ -279,6 +307,29 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201607291022070_add CityId to AspNetUser.resx">
+      <DependentUpon>201607291022070_add CityId to AspNetUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607291029518_CityId Required.resx">
+      <DependentUpon>201607291029518_CityId Required.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607291053120_Adding CityRegionCountryTables.resx">
+      <DependentUpon>201607291053120_Adding CityRegionCountryTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607291056101_Adding foreign key to CityId in tb.User.resx">
+      <DependentUpon>201607291056101_Adding foreign key to CityId in tb.User.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607291232299_Adding Category Table.resx">
+      <DependentUpon>201607291232299_Adding Category Table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607291238143_Adding Category Properties.resx">
+      <DependentUpon>201607291238143_Adding Category Properties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607291417465_Adding ItemsComments and more properties.resx">
+      <DependentUpon>201607291417465_Adding ItemsComments and more properties.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

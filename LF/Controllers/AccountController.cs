@@ -158,30 +158,14 @@ namespace LF.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            SelectListItem country = null;
-            SelectListItem country2 = null;
-
-
-
-            SelectListItem city = null;
-            SelectListItem city2 = null;
-            SelectListItem city3 = null;
-
-
-            List<SelectListItem> countriesList = new List<SelectListItem>();
             List<SelectListItem> regionList = new List<SelectListItem>();
 
             List<SelectListItem> cityList = new List<SelectListItem>();
 
             RegisterViewModel regViewModel = new RegisterViewModel();
+            regViewModel.Countries = PopulateModelWithCountries();
 
-            country = new SelectListItem() { Text = "Bulgaria", Value = "922d40c3ad9542c8ac82d22fa5672391" };
-            country2 = new SelectListItem() { Text = "Greece", Value = "34786435a29f411b8f7241b405045715" };
 
-            countriesList.Add(country);
-            countriesList.Add(country2);
-
-            regViewModel.Countries = countriesList;
             regViewModel.Regions = regionList;
             regViewModel.Cities = cityList;
 
@@ -217,35 +201,65 @@ namespace LF.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            RegisterViewModel regViewModel = model;
+            try
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    //  Comment the following line to prevent log in until the user is confirmed.
-                    //  await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CityId = model.CityId };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        //  Comment the following line to prevent log in until the user is confirmed.
+                        //  await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account",
-                       new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account",
-                       "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account",
+                           new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        await UserManager.SendEmailAsync(user.Id, "Confirm your account",
+                           "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    // Uncomment to debug locally 
-                    TempData["ViewBagLink"] = callbackUrl;
+                        // Uncomment to debug locally 
+                        TempData["ViewBagLink"] = callbackUrl;
 
-                    ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                                    + "before you can log in.";
+                        ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
+                                        + "before you can log in.";
 
-                    return View("Info");
-                    //return RedirectToAction("Index", "Home");
+                        return View("Info");
+                        //return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    regViewModel.Countries = PopulateModelWithCountries();
+                }
+            }
+            finally
+            {
+                if (regViewModel.Countries == null)
+                {
+                    regViewModel.Countries = PopulateModelWithCountries();
+                }
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private List<SelectListItem> PopulateModelWithCountries()
+        {
+            List<SelectListItem> countriesList = new List<SelectListItem>();
+
+            SelectListItem country = null;
+            SelectListItem country2 = null;
+            country = new SelectListItem() { Text = "Bulgaria", Value = "922d40c3ad9542c8ac82d22fa5672391" };
+            country2 = new SelectListItem() { Text = "Greece", Value = "34786435a29f411b8f7241b405045715" };
+
+            countriesList.Add(country);
+            countriesList.Add(country2);
+
+            return countriesList;
         }
 
         //
@@ -403,7 +417,6 @@ namespace LF.Controllers
             {
                 return RedirectToAction("Login");
             }
-
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
@@ -419,7 +432,13 @@ namespace LF.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel
+                    {
+                        Email = loginInfo.Email,
+                        Regions = new List<SelectListItem>(),
+                        Cities = new List<SelectListItem>(),
+                        Countries = PopulateModelWithCountries()
+                    });
             }
         }
 
@@ -434,28 +453,43 @@ namespace LF.Controllers
             {
                 return RedirectToAction("Index", "Manage");
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
+                if (ModelState.IsValid)
                 {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    // Get the information about the user from the external login provider
+                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                    if (info == null)
+                    {
+                        return View("ExternalLoginFailure");
+                    }
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CityId = model.CityId };
+                    var result = await UserManager.CreateAsync(user);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                        if (result.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            return RedirectToLocal(returnUrl);
+                        }
                     }
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    model.Countries = PopulateModelWithCountries();
+                }
             }
+            finally
+            {
+                if (model.Countries == null)
+                {
+                    model.Countries = PopulateModelWithCountries();
+                }
+            }
+
+
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
