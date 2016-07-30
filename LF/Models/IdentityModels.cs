@@ -21,15 +21,19 @@ namespace LF.Models
             // Add custom user claims here
             return userIdentity;
         }
+    
+        public Guid? CityId { get; set; }
 
-        [Required]
-        public string CityId { get; set; }
+        [StringLength(50)]
+        public string FirstName { get; set; }
 
-        public City City { get; set; }
+        [StringLength(50)]
+        public string LastName { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
 
         public virtual ICollection<Item> Items { get; set; }
+
     }
 
     public class City
@@ -172,6 +176,7 @@ namespace LF.Models
 
         public virtual Comment ParentComment { get; set; }
 
+        [Required]
         public virtual ApplicationUser User { get; set; }
     }
 
@@ -193,6 +198,7 @@ namespace LF.Models
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -23,21 +23,12 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "readonly" })
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            @Html.Label("Country", new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
-                @Html.HiddenFor(x => x.RegionId)
-                @Html.HiddenFor(x => x.CityId)
-                @Html.DropDownListFor(model => model.CountryId, Model.Countries, " --Select-- ", new { @class = "form-control", @Id = "CountriesDDL" })
-            </div>
-            <div class="RegionsDDL">
-                @Html.ValidationMessageFor(m => m.RegionId, "", new { @class = "text-danger" })
-            </div>
-            <div class="CitiesDDL">
-                @Html.ValidationMessageFor(m => m.CityId, "", new { @class = "text-danger" })
-            </div>
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">

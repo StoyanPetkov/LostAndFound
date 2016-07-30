@@ -5,11 +5,19 @@ using System.Web.Mvc;
 
 namespace LF.Models
 {
-    public class ExternalLoginConfirmationViewModel : LocationModel
+    public class ExternalLoginConfirmationViewModel
     {
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
     }
 
     public class ExternalLoginListViewModel

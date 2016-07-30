@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using LF.Models;
 using System.Collections.Generic;
 using LF.Models.DropDownListModels;
+using Facebook;
 
 namespace LF.Controllers
 {
@@ -59,7 +60,12 @@ namespace LF.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            UrlHelper u = new UrlHelper(this.ControllerContext.RequestContext);
+            string url = u.Action("Index", "Home", null);
+            returnUrl = url;
+
             ViewBag.ReturnUrl = returnUrl;
+
             return View();
         }
 
@@ -79,7 +85,7 @@ namespace LF.Controllers
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user != null)
             {
-                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id) && UserManager.HasPassword(user.Id))
                 {
                     string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
 
@@ -94,7 +100,7 @@ namespace LF.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -105,7 +111,14 @@ namespace LF.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    if (!UserManager.HasPassword(user.Id))
+                    {
+                        ModelState.AddModelError("", "Please log in with your External provider.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                    }
                     return View(model);
             }
         }
@@ -206,7 +219,7 @@ namespace LF.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CityId = model.CityId };
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
@@ -217,7 +230,7 @@ namespace LF.Controllers
                         var callbackUrl = Url.Action("ConfirmEmail", "Account",
                            new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         await UserManager.SendEmailAsync(user.Id, "Confirm your account",
-                           "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                           "Please confirm your account by clicking " + callbackUrl);
 
                         // Uncomment to debug locally 
                         TempData["ViewBagLink"] = callbackUrl;
@@ -417,28 +430,51 @@ namespace LF.Controllers
             {
                 return RedirectToAction("Login");
             }
+
+            ExternalLoginConfirmationViewModel model = new ExternalLoginConfirmationViewModel();
+            // added the following lines
+            if (loginInfo.Login.LoginProvider == "Facebook")
+            {
+                var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
+                var access_token = identity.FindFirstValue("FacebookAccessToken");
+                var fb = new FacebookClient(access_token);
+                dynamic myInfo = fb.Get("/me?fields=email,first_name,last_name,picture"); // specify the email field
+                loginInfo.Email = myInfo.email;
+                model.FirstName = myInfo.first_name;
+                model.LastName = myInfo.last_name;
+                model.Email = loginInfo.Email;
+            }
+
+            if (loginInfo.Login.LoginProvider == "Google")
+            {
+                var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
+                // Get the claims values
+                model.FirstName = identity.Claims.Where(c => c.Type == ClaimTypes.GivenName)
+                                   .Select(c => c.Value).SingleOrDefault();
+                model.LastName = identity.Claims.Where(c => c.Type == ClaimTypes.Surname)
+                                   .Select(c => c.Value).SingleOrDefault();
+                model.Email = identity.Claims.Where(c => c.Type == ClaimTypes.Email)
+                                   .Select(c => c.Value).SingleOrDefault();
+            }
+
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+
+                //case SignInStatus.RequiresVerification:
+                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel
-                    {
-                        Email = loginInfo.Email,
-                        Regions = new List<SelectListItem>(),
-                        Cities = new List<SelectListItem>(),
-                        Countries = PopulateModelWithCountries()
-                    });
+                    return View("ExternalLoginConfirmation", model);
             }
         }
 
@@ -453,43 +489,35 @@ namespace LF.Controllers
             {
                 return RedirectToAction("Index", "Manage");
             }
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                // Get the information about the user from the external login provider
+                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                if (info == null)
                 {
-                    // Get the information about the user from the external login provider
-                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                    if (info == null)
-                    {
-                        return View("ExternalLoginFailure");
-                    }
-                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CityId = model.CityId };
-                    var result = await UserManager.CreateAsync(user);
+                    return View("ExternalLoginFailure");
+                }
+                ApplicationUser user = new ApplicationUser()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                };
+
+                // var user = new ApplicationUser { UserName = model.Email , Email = model.Email  };
+                var result = await UserManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                        if (result.Succeeded)
-                        {
-                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToLocal(returnUrl);
-                        }
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToLocal(returnUrl);
                     }
-                    AddErrors(result);
                 }
-                else
-                {
-                    model.Countries = PopulateModelWithCountries();
-                }
+                AddErrors(result);
             }
-            finally
-            {
-                if (model.Countries == null)
-                {
-                    model.Countries = PopulateModelWithCountries();
-                }
-            }
-
-
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
@@ -597,7 +625,7 @@ namespace LF.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
                new { userId = userID, code = code }, protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(userID, subject,
-               "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+               "Please confirm your account by clicking " + callbackUrl);
 
             return callbackUrl;
         }

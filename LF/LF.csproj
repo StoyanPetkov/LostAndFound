@@ -48,6 +48,10 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -191,33 +195,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201607291022070_add CityId to AspNetUser.cs" />
-    <Compile Include="Migrations\201607291022070_add CityId to AspNetUser.Designer.cs">
-      <DependentUpon>201607291022070_add CityId to AspNetUser.cs</DependentUpon>
+    <Compile Include="Migrations\201607300906094_add users.cs" />
+    <Compile Include="Migrations\201607300906094_add users.Designer.cs">
+      <DependentUpon>201607300906094_add users.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201607291029518_CityId Required.cs" />
-    <Compile Include="Migrations\201607291029518_CityId Required.Designer.cs">
-      <DependentUpon>201607291029518_CityId Required.cs</DependentUpon>
+    <Compile Include="Migrations\201607300918156_updating comments table.cs" />
+    <Compile Include="Migrations\201607300918156_updating comments table.Designer.cs">
+      <DependentUpon>201607300918156_updating comments table.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201607291053120_Adding CityRegionCountryTables.cs" />
-    <Compile Include="Migrations\201607291053120_Adding CityRegionCountryTables.Designer.cs">
-      <DependentUpon>201607291053120_Adding CityRegionCountryTables.cs</DependentUpon>
+    <Compile Include="Migrations\201607301302413_removing required cityId from user table.cs" />
+    <Compile Include="Migrations\201607301302413_removing required cityId from user table.Designer.cs">
+      <DependentUpon>201607301302413_removing required cityId from user table.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201607291056101_Adding foreign key to CityId in tb.User.cs" />
-    <Compile Include="Migrations\201607291056101_Adding foreign key to CityId in tb.User.Designer.cs">
-      <DependentUpon>201607291056101_Adding foreign key to CityId in tb.User.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201607291232299_Adding Category Table.cs" />
-    <Compile Include="Migrations\201607291232299_Adding Category Table.Designer.cs">
-      <DependentUpon>201607291232299_Adding Category Table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201607291238143_Adding Category Properties.cs" />
-    <Compile Include="Migrations\201607291238143_Adding Category Properties.Designer.cs">
-      <DependentUpon>201607291238143_Adding Category Properties.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201607291417465_Adding ItemsComments and more properties.cs" />
-    <Compile Include="Migrations\201607291417465_Adding ItemsComments and more properties.Designer.cs">
-      <DependentUpon>201607291417465_Adding ItemsComments and more properties.cs</DependentUpon>
+    <Compile Include="Migrations\201607301308167_Adding first and last name to user table.cs" />
+    <Compile Include="Migrations\201607301308167_Adding first and last name to user table.Designer.cs">
+      <DependentUpon>201607301308167_Adding first and last name to user table.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -309,26 +301,17 @@
     <Content Include="Scripts\jquery-2.2.3.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201607291022070_add CityId to AspNetUser.resx">
-      <DependentUpon>201607291022070_add CityId to AspNetUser.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201607300906094_add users.resx">
+      <DependentUpon>201607300906094_add users.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201607291029518_CityId Required.resx">
-      <DependentUpon>201607291029518_CityId Required.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201607300918156_updating comments table.resx">
+      <DependentUpon>201607300918156_updating comments table.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201607291053120_Adding CityRegionCountryTables.resx">
-      <DependentUpon>201607291053120_Adding CityRegionCountryTables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201607301302413_removing required cityId from user table.resx">
+      <DependentUpon>201607301302413_removing required cityId from user table.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201607291056101_Adding foreign key to CityId in tb.User.resx">
-      <DependentUpon>201607291056101_Adding foreign key to CityId in tb.User.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201607291232299_Adding Category Table.resx">
-      <DependentUpon>201607291232299_Adding Category Table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201607291238143_Adding Category Properties.resx">
-      <DependentUpon>201607291238143_Adding Category Properties.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201607291417465_Adding ItemsComments and more properties.resx">
-      <DependentUpon>201607291417465_Adding ItemsComments and more properties.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201607301308167_Adding first and last name to user table.resx">
+      <DependentUpon>201607301308167_Adding first and last name to user table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

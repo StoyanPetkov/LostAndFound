@@ -6,6 +6,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using LF.Models;
+using Microsoft.Owin.Security.Facebook;
+using System.Threading.Tasks;
 
 namespace LF
 {
@@ -54,15 +56,38 @@ namespace LF
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-               appId: "402893966546204",
-               appSecret: "a820ff454227672c3195b75d984a3714");
+            app.UseFacebookAuthentication(new FacebookAuthenticationOptions
+            {
+                AppId = "402893966546204",
+                AppSecret = "a820ff454227672c3195b75d984a3714",
+                Scope = { "email", "public_profile" },//, "first_name","last_name","location", "picture" 
+                Provider = new FacebookAuthenticationProvider
+                {
+                    OnAuthenticated = context =>
+                    {
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("FacebookAccessToken", context.AccessToken));
+                        foreach (var claim in context.User)
+                        {
+                            var claimType = string.Format("urn:facebook:{0}", claim.Key);
+                            string claimValue = claim.Value.ToString();
+                            if (!context.Identity.HasClaim(claimType, claimValue))
+                                context.Identity.AddClaim(new System.Security.Claims.Claim(claimType, claimValue, "XmlSchemaString", "Facebook"));
+                        }
+                        return Task.FromResult(true);
+                    }
+                },
+                SignInAsAuthenticationType = DefaultAuthenticationTypes.ExternalCookie
+            });
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            var googleOptions = new GoogleOAuth2AuthenticationOptions
             {
                 ClientId = "839729734397-2uma1s2ui6dic8m0a8ev8prvapeldjpe.apps.googleusercontent.com",
-                ClientSecret = "CNB9ARiLLkY4LxbLuOhp38fu"
-            });
+                ClientSecret = "CNB9ARiLLkY4LxbLuOhp38fu",
+
+            };
+            googleOptions.Scope.Add("https://www.googleapis.com/auth/plus.profile.emails.read");
+            app.UseGoogleAuthentication(googleOptions);
+
         }
     }
 }
