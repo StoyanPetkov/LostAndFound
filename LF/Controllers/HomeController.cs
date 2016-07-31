@@ -8,6 +8,7 @@ namespace LF.Controllers
 {
     
     [RequireHttps]
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -22,7 +23,6 @@ namespace LF.Controllers
             return View();
         }
 
-        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

@@ -107,8 +107,10 @@ namespace LF.Models
 
         [Required(ErrorMessage = "Country is required")]
         public string CountryId { get; set; }
+
         [Required(ErrorMessage = "Region is required")]
         public string RegionId { get; set; }
+
         [Required(ErrorMessage = "City is required")]
         public string CityId { get; set; }
     }
