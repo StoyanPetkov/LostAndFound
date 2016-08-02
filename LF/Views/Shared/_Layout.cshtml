@@ -4,11 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Lost &amp; Found</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    @*<link href="@Url.Content("~/CustomCSS/registerView.css")" rel="stylesheet" type="text/css" />
-    @RenderSection("Styles", false)*@
 
 </head>
 <body>
@@ -26,7 +24,7 @@
                 @if (User.Identity.GetUserId() != null)
                 {
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Article", "Index", "Article")</li>
+                        <li>@Html.ActionLink("Items", "Index", "Item")</li>
                         <li>@Html.ActionLink("About", "About", "Home")</li>
                         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     </ul>

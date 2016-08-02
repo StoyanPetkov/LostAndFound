@@ -189,8 +189,8 @@ namespace LF.Controllers
         public ActionResult GetRegions(string countryId)
         {
             RegisterDropDownListVM model = new RegisterDropDownListVM("Regions");
-            model.AddItem("Plovdiv", "6db90c57a1a9427badb5025e23ecf740");
-            model.AddItem("Sofia", "09596a7c4d2c40219795291062af527c");
+            model.AddItem("Plovdiv", new Guid("6db90c57a1a9427badb5025e23ecf740"));
+            model.AddItem("Sofia", new Guid("09596a7c4d2c40219795291062af527c"));
 
             return PartialView("_PartialRegisterDropDownList", model);
         }
@@ -200,9 +200,9 @@ namespace LF.Controllers
         {
             RegisterDropDownListVM model = new RegisterDropDownListVM("Cities");
 
-            model.AddItem("Plovdiv", "600cbfa38cb04217b118d34580bbebf6");
-            model.AddItem("Sofia", "c29d966a5fda4f7197dc2d6f25875ca0");
-            model.AddItem("Pernik", "5619cc53db5e451684baf93ee2191a89");
+            model.AddItem("Plovdiv", new Guid("600cbfa38cb04217b118d34580bbebf6"));
+            model.AddItem("Sofia", new Guid("c29d966a5fda4f7197dc2d6f25875ca0"));
+            model.AddItem("Pernik", new Guid("5619cc53db5e451684baf93ee2191a89"));
 
             return PartialView("_PartialRegisterDropDownList", model);
         }

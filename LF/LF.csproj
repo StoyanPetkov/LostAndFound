@@ -212,9 +212,13 @@
     <Compile Include="Migrations\201607301308167_Adding first and last name to user table.Designer.cs">
       <DependentUpon>201607301308167_Adding first and last name to user table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608011657428_test.cs" />
+    <Compile Include="Migrations\201608011657428_test.Designer.cs">
+      <DependentUpon>201608011657428_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ArticleViewModels.cs" />
+    <Compile Include="Models\ItemViewModels.cs" />
     <Compile Include="Models\DropDownListModels\RegisterDropDownListVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -228,6 +232,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\CustomCSS\ItemView.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -278,6 +283,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\CustomCSS\registerView.css" />
+    <Content Include="Scripts\CustomJS\itemView.js" />
     <Content Include="Scripts\CustomJS\registerView.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />
@@ -351,6 +357,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607301308167_Adding first and last name to user table.resx">
       <DependentUpon>201607301308167_Adding first and last name to user table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608011657428_test.resx">
+      <DependentUpon>201608011657428_test.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

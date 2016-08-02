@@ -181,3 +181,4 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Facebook.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Facebook.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.removingrequiredcityIdfromusertable.resources
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.Addingfirstandlastnametousertable.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.test.resources
