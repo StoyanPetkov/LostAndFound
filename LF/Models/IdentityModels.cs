@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace LF.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser, IBaseEntity<ApplicationUser>
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -21,7 +21,7 @@ namespace LF.Models
             // Add custom user claims here
             return userIdentity;
         }
-    
+
         public Guid? CityId { get; set; }
 
         [StringLength(50)]
@@ -30,14 +30,20 @@ namespace LF.Models
         [StringLength(50)]
         public string LastName { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public virtual ICollection<Comment> Comments { get; set; }
 
         public virtual ICollection<Item> Items { get; set; }
 
     }
 
-    public class City
+
+
+    public class City : IBaseEntity<City>
     {
+        public string Id { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid CityId { get; set; }
@@ -47,6 +53,8 @@ namespace LF.Models
         [Required]
         [MaxLength(255)]
         public string CityName { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         [Required]
         public Guid RegionId { get; set; }
@@ -65,24 +73,28 @@ namespace LF.Models
         [MaxLength(255)]
         public string RegionName { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         [Required]
         public Guid CountryId { get; set; }
 
         public Country Country { get; set; }
     }
 
-    public class Country
+    public class Country 
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid CountryId { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         [Required]
         [MaxLength(255)]
         public string CountryName { get; set; }
     }
 
-    public class Category
+    public class Category 
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -92,6 +104,8 @@ namespace LF.Models
         [MaxLength(255)]
         public string CategoryName { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public Guid? ParentId { get; set; }
 
         [ForeignKey("ParentId")]
@@ -100,11 +114,13 @@ namespace LF.Models
         public virtual ICollection<Item> Items { get; set; }
     }
 
-    public class Item
+    public class Item : IBaseEntity<Item>
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         [Required]
         public Guid CategoryId { get; set; }
@@ -122,7 +138,7 @@ namespace LF.Models
         public virtual ApplicationUser User { get; set; }
 
         [ForeignKey("CommentId")]
-        public virtual Comment Comments{ get; set; }
+        public virtual Comment Comments { get; set; }
 
         [ForeignKey("CategoryId")]
         [Required]
@@ -157,7 +173,7 @@ namespace LF.Models
 
     }
 
-    public class Comment
+    public class Comment 
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -170,6 +186,8 @@ namespace LF.Models
 
         [Required]
         public string Content { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         [Required]
         public Guid ItemId { get; set; }
@@ -198,7 +216,6 @@ namespace LF.Models
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
-
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

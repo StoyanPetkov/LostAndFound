@@ -118,6 +118,7 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\LF.pdb
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Antlr3.Runtime.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\EntityFramework.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\EntityFramework.SqlServer.dll
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Facebook.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.AspNet.Identity.Core.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.AspNet.Identity.Owin.dll
@@ -147,6 +148,7 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\System.Web.WebPa
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\System.Web.WebPages.Razor.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\WebGrease.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Antlr3.Runtime.pdb
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Facebook.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Newtonsoft.Json.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\System.Net.Http.Formatting.xml
@@ -171,14 +173,8 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.S
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csprojResolveAssemblyReference.cache
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.CreatingDBINITIALCOMMIT.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csproj.GenerateResource.Cache
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.pdb
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.addusers.resources
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csproj.GenerateResource.Cache
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.updatingcommentstable.resources
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csprojResolveAssemblyReference.cache
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Facebook.dll
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Facebook.xml
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.removingrequiredcityIdfromusertable.resources
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.Addingfirstandlastnametousertable.resources
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.test.resources
