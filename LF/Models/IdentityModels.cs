@@ -40,10 +40,8 @@ namespace LF.Models
 
 
 
-    public class City : IBaseEntity<City>
+    public class City
     {
-        public string Id { get; set; }
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid CityId { get; set; }
@@ -114,13 +112,11 @@ namespace LF.Models
         public virtual ICollection<Item> Items { get; set; }
     }
 
-    public class Item : IBaseEntity<Item>
+    public class Item
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public string Id { get; set; }
-
-        public bool IsDeleted { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public Guid CategoryId { get; set; }
@@ -134,18 +130,15 @@ namespace LF.Models
         public Guid CityId { get; set; }
 
         [ForeignKey("UserId")]
-        [Required]
         public virtual ApplicationUser User { get; set; }
 
         [ForeignKey("CommentId")]
         public virtual Comment Comments { get; set; }
 
         [ForeignKey("CategoryId")]
-        [Required]
         public virtual Category Category { get; set; }
 
         [ForeignKey("CityId")]
-        [Required]
         public virtual City City { get; set; }
 
         [Required]
@@ -156,7 +149,7 @@ namespace LF.Models
         public bool IsLost { get; set; }
 
         [Required]
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
 
         public string Description { get; set; }
 

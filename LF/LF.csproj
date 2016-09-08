@@ -195,22 +195,32 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DataAccess\LFDataManager.cs" />
     <Compile Include="DataAccess\Repositories\BaseRepository.cs" />
-    <Compile Include="DataAccess\Repositories\IBaseRepository.cs" />
     <Compile Include="DataAccess\Repositories\ItemRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\RenderHelper.cs" />
     <Compile Include="Migrations\201608031802114_Creating DB - INITIAL COMMIT.cs" />
     <Compile Include="Migrations\201608031802114_Creating DB - INITIAL COMMIT.Designer.cs">
       <DependentUpon>201608031802114_Creating DB - INITIAL COMMIT.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608071320521_Remove items propert - isActive.cs" />
+    <Compile Include="Migrations\201608071320521_Remove items propert - isActive.Designer.cs">
+      <DependentUpon>201608071320521_Remove items propert - isActive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608071343280_Remove some required values from fields.cs" />
+    <Compile Include="Migrations\201608071343280_Remove some required values from fields.Designer.cs">
+      <DependentUpon>201608071343280_Remove some required values from fields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DropDownListModels\MenuDropDownListModels.cs" />
     <Compile Include="Models\IBaseEntity.cs" />
     <Compile Include="Models\ItemViewModels.cs" />
     <Compile Include="Models\DropDownListModels\RegisterDropDownListVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MenuModel\MenuModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -268,12 +278,14 @@
     <Content Include="Content\scss\_screen-reader.scss" />
     <Content Include="Content\scss\_stacked.scss" />
     <Content Include="Content\scss\_variables.scss" />
+    <Content Include="Content\scss\sidebar-menu.scss" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\CustomCSS\registerView.css" />
     <Content Include="Scripts\CustomJS\itemView.js" />
     <Content Include="Scripts\CustomJS\registerView.js" />
+    <Content Include="Scripts\CustomJS\sidebar-menu.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -325,6 +337,7 @@
     <Content Include="Views\Shared\_PartialRegisterDropDownList.cshtml" />
     <Content Include="Views\Item\Index.cshtml" />
     <Content Include="Views\Item\CreateItem.cshtml" />
+    <Content Include="Views\Item\ItemSideMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -337,6 +350,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201608031802114_Creating DB - INITIAL COMMIT.resx">
       <DependentUpon>201608031802114_Creating DB - INITIAL COMMIT.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608071320521_Remove items propert - isActive.resx">
+      <DependentUpon>201608071320521_Remove items propert - isActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608071343280_Remove some required values from fields.resx">
+      <DependentUpon>201608071343280_Remove some required values from fields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

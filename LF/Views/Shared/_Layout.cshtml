@@ -7,7 +7,7 @@
     <title>@ViewBag.Title - Lost &amp; Found</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    <script src=" https://use.fontawesome.com/2de92cc6c8.js "> </script> 
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -35,10 +35,12 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Stoyan Petkov</p>
-        </footer>
+        <div>
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Stoyan Petkov</p>
+            </footer>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

@@ -106,13 +106,13 @@ namespace LF.Models
         public IEnumerable<SelectListItem> Cities { get; set; }
 
         [Required(ErrorMessage = "Country is required")]
-        public string CountryId { get; set; }
+        public Guid CountryId { get; set; }
 
         [Required(ErrorMessage = "Region is required")]
-        public string RegionId { get; set; }
+        public Guid RegionId { get; set; }
 
         [Required(ErrorMessage = "City is required")]
-        public string CityId { get; set; }
+        public Guid CityId { get; set; }
     }
 
     public class ResetPasswordViewModel

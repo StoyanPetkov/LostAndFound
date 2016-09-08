@@ -178,3 +178,5 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrati
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csproj.GenerateResource.Cache
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.pdb
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.RemoveitemspropertisActive.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.Removesomerequiredvaluesfromfields.resources
