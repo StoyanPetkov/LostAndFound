@@ -1,0 +1,48 @@
+﻿@model LF.Models.CreateItemVM
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/itemView.css")" />
+
+@{
+    ViewBag.Title = "CreateItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>CreateItem</h2>
+
+<div>
+    @using (Html.BeginForm("CreateItem", "Item", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.HiddenFor(m=> m.UserId)
+        <div class="row createItem">
+            <div class="col-md6 createItemLeft">
+                @Html.ValidationMessageFor(m => m.Title)
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control itemInput", @placeholder = "Title" })
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Ddescription", @rows = "5", @cols = "50" })
+                @Html.TextBoxFor(m => m.RewardValue, new { @class = "form-control", @placeholder = "Reward value" })
+                @Html.LabelFor(m => m.OwnerEmail, "E-mail for contacts")
+                @Html.TextBoxFor(m => m.OwnerEmail, new { @class = "form-control itemInput", @readonly = "readonly" })
+            </div>
+            <br />
+            <div class="col-md-6 createItemRight">
+                @Html.ValidationMessageFor(m => m.CountryId)
+                @Html.DropDownListFor(model => model.CountryId, Model.Countries, " --Select Country-- ", new { @class = "form-control", @Id = "CountriesDDL" })
+                @Html.ValidationMessageFor(m => m.RegionId)
+                @Html.DropDownListFor(model => model.RegionId, Model.Regions, " --Select Region-- ", new { @class = "form-control", @Id = "RegionsDDL" })
+                @Html.ValidationMessageFor(m => m.CityId)
+                @Html.DropDownListFor(model => model.CityId, Model.Cities, " --Select City-- ", new { @class = "form-control", @Id = "CitiesDDL" })
+                @Html.DropDownListFor(model => model.CategoryId, Model.Categories, " --Select Category-- ", new { @class = "form-control", @Id = "CategoryDDL" })
+                @Html.DropDownListFor(m => m.Size, Model.Sizes, " --Select size--", new { @class = "form-control", @placeholder = "Select size", @Id = "SizeDDL" })
+                @Html.ValidationMessageFor(m => m.IsLost)
+                @Html.LabelFor(m => m.IsLost, "Is item lost ?")
+                @Html.CheckBoxFor(m => m.IsLost, new { @class = "" })
+            </div>
+            <br />
+
+        </div>
+        <input type="submit" value="save" class="btn-success" id="submitBtn"/>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval"),
+    @Scripts.Render("~/bundles/customBundleScript"),
+}

@@ -1,0 +1,45 @@
+﻿body {
+}
+
+.LostItemBox {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    margin:0 auto;
+}
+
+.FoundItemBox {
+    border-radius: 25px;
+    border: 2px solid #0094ff;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    margin:0 auto;
+}
+
+.HotItemBox {
+    border-radius: 25px;
+    border: 2px solid #ff0000;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    margin:0 auto;
+}
+
+.ItemBoxes {
+    margin-top:65px;
+}
+
+.ItemBoxes p{
+    font-size:smaller;
+}
+
+.ItemBoxes div{
+    text-align:center;
+}
+
+    .ItemBoxes div > button {
+        margin-top:15px;
+    }

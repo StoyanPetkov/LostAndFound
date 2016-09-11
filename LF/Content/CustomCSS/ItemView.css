@@ -1,0 +1,130 @@
+﻿textarea {
+    height: 150px;
+    resize: none;
+}
+
+.createItemLeft {
+    position: relative;
+    float: left;
+}
+
+.createItemLeft input,textarea{
+    margin-top: 20px;
+}
+
+.createItemRight{
+    margin-left: 70px;
+}
+
+.createItemRight select {
+    margin-bottom:10px;
+}
+
+
+.itemInput input {
+    width: 200px;
+}
+
+#submitBtn {
+    margin-top:15px;
+    width:80px;
+}
+
+#sideMenu{
+    /*margin-top:2%;
+    margin-left:2%;*/
+}
+
+#sideMenu div{
+    margin-top:20px;
+}
+
+
+.main-content {
+    display:block;
+    position:relative;
+    top:25px;
+    bottom:25px;
+}
+
+body .Menu div > select{
+        font-size:12px;
+}
+
+#filterMenu {
+    
+}
+
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 50px;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.8s; /* 0.5 second transition effect to slide in the sidenav */
+    color:#818181; 
+}
+
+.DDL select, option{
+    margin-top:30px;
+}
+
+/* The navigation menu links */
+.sidenav select, input {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    background-color:#111;
+    width:80%;
+    margin:0 auto;
+}
+
+.sidenav > p,u,b{
+    font-size: xx-large;
+}
+
+body .sidenav > font{
+    margin-left:25px;
+}
+
+.sidenav input{
+    float:right;
+}
+
+    .sidenav select option{
+          background-color:#111;
+    }
+
+/* When you mouse over the navigation links, change their color */
+.sidenav select:hover, .offcanvas option:focus{
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    /*transition: margin-left .5s;*/
+    padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav select {font-size: 8px;}
+}
