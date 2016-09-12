@@ -8,17 +8,17 @@
     float: left;
 }
 
-.createItemLeft input,textarea{
-    margin-top: 20px;
-}
+    .createItemLeft input, textarea {
+        margin-top: 20px;
+    }
 
-.createItemRight{
+.createItemRight {
     margin-left: 70px;
 }
 
-.createItemRight select {
-    margin-bottom:10px;
-}
+    .createItemRight select {
+        margin-bottom: 10px;
+    }
 
 
 .itemInput input {
@@ -26,33 +26,133 @@
 }
 
 #submitBtn {
-    margin-top:15px;
-    width:80px;
+    margin-top: 15px;
+    width: 80px;
 }
 
-#sideMenu{
+#sideMenu {
     /*margin-top:2%;
     margin-left:2%;*/
 }
 
-#sideMenu div{
-    margin-top:20px;
-}
-
-
+    #sideMenu div {
+        margin-top: 20px;
+    }
 .main-content {
-    display:block;
-    position:relative;
-    top:25px;
-    bottom:25px;
+    display: block;
+    position: relative;
+    top: 25px;
+    bottom: 25px;
 }
 
-body .Menu div > select{
-        font-size:12px;
+body .Menu div > select {
+    font-size: 12px;
 }
 
-#filterMenu {
-    
+
+
+.sidenav > p, u, b {
+    font-size: 18px;
+}
+
+    .sidenav p:hover, u:hover, font:hover, label:hover, navbar-brand {
+        color: #f1f1f1;
+        transition: 0.3s;
+    }
+
+body .sidenav > font {
+    margin-left: 25px;
+}
+
+.sidenav input {
+    float: right;
+}
+
+.sidenav select option {
+    background-color: #111;
+}
+
+.onoffswitch {
+    position: relative;
+    margin-left:20%;
+    width: 126px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#radioGroup div > label {
+    margin-left:50px;
+}
+
+.onoffswitch-checkbox {
+    display: none;
+}
+
+.onoffswitch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #FFFFFF;
+    border-radius: 20px;
+}
+
+.onoffswitch-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block;
+        float: left;
+        width: 50%;
+        height: 33px;
+        padding: 0;
+        line-height: 33px;
+        font-size: 14px;
+        color: white;
+        font-family: inherit;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .onoffswitch-inner:before {
+        content: "Намерено";
+        padding-left: 20px;
+        background-color: #111;
+        color: #818181;
+    }
+
+    .onoffswitch-inner:after {
+        content: "Изгубено";
+        padding-right: 20px;
+        background-color: #111;
+        color: #818181;
+        text-align: right;
+    }
+
+.onoffswitch-switch {
+    display: block;
+    width: 17px;
+    margin: 8px;
+    background: #FFF7F7;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 89px;
+    border: 2px solid #FFFFFF;
+    border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px;
 }
 
 /* The side navigation menu */
@@ -67,64 +167,89 @@ body .Menu div > select{
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.8s; /* 0.5 second transition effect to slide in the sidenav */
-    color:#818181; 
-}
-
-.DDL select, option{
-    margin-top:30px;
-}
-
-/* The navigation menu links */
-.sidenav select, input {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 14px;
     color: #818181;
-    display: block;
-    transition: 0.3s;
-    background-color:#111;
-    width:80%;
-    margin:0 auto;
 }
 
-.sidenav > p,u,b{
-    font-size: xx-large;
-}
-
-body .sidenav > font{
-    margin-left:25px;
-}
-
-.sidenav input{
-    float:right;
-}
-
-    .sidenav select option{
-          background-color:#111;
+    /* The navigation menu links */
+    .sidenav select, input {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 14px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+        background-color: #111;
+        width: 80%;
+        margin: 0 auto;
     }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav select:hover, .offcanvas option:focus{
-    color: #f1f1f1;
-}
 
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+        /* When you mouse over the navigation links, change their color */
+        .sidenav select:hover, .offcanvas option:focus {
+            color: #f1f1f1;
+        }
+
+    /* Position and style the close button (top right corner) */
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+#inputSection {
+    display:inline-flex;
+    margin-top:30px;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
-    /*transition: margin-left .5s;*/
+    transition: margin-left .5s;
     padding: 20px;
+
 }
 
+#inputFilter {
+    margin-left:35px;
+}
+
+#inputFilter input{
+    margin-left:35px;
+    width:50%;
+}
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav select {font-size: 8px;}
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav > select, input, option, label, u {
+            font-size: 8px;
+        }
+    .onoffswitch-inner:after {
+        font-size:8px;
+    }
+    .onoffswitch-inner:before {
+        font-size:8px;
+    }
+}
+
+input[type=radio] {
+    display: none;
+}
+input[type=radio] + label::before {
+    content: '';
+    display: inline-block;
+    border: 2px solid #FFF7F7;
+    border-radius: 75%;
+    margin: 0 0.5em;
+}
+input[type=radio]:checked + label::before {
+    background-color: #FFF7F7;
+}
+
+.radio4 + label::before {
+    width:1.5em;
+    height:1.5em;
 }

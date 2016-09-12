@@ -15,18 +15,24 @@ namespace LF.Models.MenuModel
 
 
         [DataType(DataType.Text)]
-        [Display(Name = "Size")]
+        [Display(Name = "Categories")]
         public IEnumerable<SelectListItem> Categories { get; set; }
 
 
         [DataType(DataType.Text)]
-        [Display(Name = "Size")]
+        [Display(Name = "Cities")]
         public IEnumerable<SelectListItem> Cities { get; set; }
 
 
         [DataType(DataType.Text)]
-        [Display(Name = "Size")]
+        [Display(Name = "Regions")]
         public IEnumerable<SelectListItem> Regions { get; set; }
+
+        [Display(Name = "FromRewardValue")]
+        public string FromRewardValue { get; set; }
+
+        [Display(Name = "ToRewardValue")]
+        public string ToRewardValue { get; set; }
     }
     
 }

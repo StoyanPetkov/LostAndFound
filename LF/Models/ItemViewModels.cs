@@ -15,14 +15,14 @@ namespace LF.Models
         public Guid UserId { get; set; }
 
         [DataType(DataType.Text)]
-        [Required(ErrorMessage = "Title is required.")]
-        [MaxLength(50,ErrorMessage = "Maximum length 50.")]
+        [Required(ErrorMessage = "Заглавието е задължително.")]
+        [MaxLength(50,ErrorMessage = "Максимална дължина 50.")]
         public string Title { get; set; }
 
         [DataType(DataType.Text)]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Category is required.")]
+        [Required(ErrorMessage = "Категорията е задължителна.")]
         public Guid CategoryId { get; set; }
 
         [DataType(DataType.DateTime)]
@@ -31,25 +31,25 @@ namespace LF.Models
         [DataType(DataType.DateTime)]
         public DateTime ModifiedOn { get; set; }
 
-        [Required(ErrorMessage = "You have to specify is item lost or found.")]
+        [Required(ErrorMessage = "Посочете дали предмета е загубен.")]
         public bool IsLost { get; set; }
 
         public byte Size { get; set; }
 
         [DataType(DataType.Currency)]
-        public float RewardValue { get; set; }
+        public string RewardValue { get; set; }
 
         [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "E-mail is required.")]
-        [MaxLength(50, ErrorMessage = "Maximum length 50.")]
+        [Required(ErrorMessage = "Електронната поща е задължителна.")]
+        [MaxLength(50, ErrorMessage = "Максимална дължина 50.")]
         public string OwnerEmail { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Size")]
+        [Display(Name = "Размер")]
         public IEnumerable<SelectListItem> Sizes { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Category")]
+        [Display(Name = "Категория")]
         public IEnumerable<SelectListItem> Categories { get; set; }
 
         public string ImageLocation { get; set; }

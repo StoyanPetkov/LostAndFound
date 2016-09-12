@@ -189,8 +189,8 @@ namespace LF.Controllers
         public ActionResult GetRegions(string countryId)
         {
             RegisterDropDownListVM model = new RegisterDropDownListVM("Regions");
-            model.AddItem("Plovdiv", new Guid("6db90c57a1a9427badb5025e23ecf740"));
-            model.AddItem("Sofia", new Guid("09596a7c4d2c40219795291062af527c"));
+            model.AddItem("Пловдив", new Guid("6db90c57a1a9427badb5025e23ecf740"));
+            model.AddItem("София", new Guid("09596a7c4d2c40219795291062af527c"));
 
             return PartialView("_PartialRegisterDropDownList", model);
         }
@@ -200,9 +200,9 @@ namespace LF.Controllers
         {
             RegisterDropDownListVM model = new RegisterDropDownListVM("Cities");
 
-            model.AddItem("Plovdiv", new Guid("600cbfa38cb04217b118d34580bbebf6"));
-            model.AddItem("Sofia", new Guid("c29d966a5fda4f7197dc2d6f25875ca0"));
-            model.AddItem("Pernik", new Guid("5619cc53db5e451684baf93ee2191a89"));
+            model.AddItem("Пловдив", new Guid("600cbfa38cb04217b118d34580bbebf6"));
+            model.AddItem("София", new Guid("c29d966a5fda4f7197dc2d6f25875ca0"));
+            model.AddItem("Перник", new Guid("5619cc53db5e451684baf93ee2191a89"));
 
             return PartialView("_PartialRegisterDropDownList", model);
         }
@@ -266,8 +266,8 @@ namespace LF.Controllers
 
             SelectListItem country = null;
             SelectListItem country2 = null;
-            country = new SelectListItem() { Text = "Bulgaria", Value = "922d40c3ad9542c8ac82d22fa5672391" };
-            country2 = new SelectListItem() { Text = "Greece", Value = "34786435a29f411b8f7241b405045715" };
+            country = new SelectListItem() { Text = "България", Value = "922d40c3ad9542c8ac82d22fa5672391" };
+            country2 = new SelectListItem() { Text = "Сърбия", Value = "34786435a29f411b8f7241b405045715" };
 
             countriesList.Add(country);
             countriesList.Add(country2);

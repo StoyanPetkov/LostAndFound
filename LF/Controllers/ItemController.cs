@@ -29,6 +29,7 @@ namespace LF.Controllers
             model.Categories = GetCategories();
             model.Regions = GetRegions();
             model.Cities = GetCities();
+            model.Sizes = GetSizes();
             return Json(RenderHelper.PartialView(this, "ItemSideMenu", model),JsonRequestBehavior.AllowGet);
         }
 
@@ -80,7 +81,7 @@ namespace LF.Controllers
                 item.IsLost = model.IsLost;
                 item.ItemName = model.Title;
                 item.Description = model.Description;
-                item.RewardValue = model.RewardValue;
+                item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
                 item.CategoryId = model.CategoryId;
                 if (model.ItemId != null)
                 {
@@ -100,6 +101,13 @@ namespace LF.Controllers
                 //throw err msg
             }
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> MyItems()
+        {
+            CreateItemVM model = new CreateItemVM();
+            return View(model);
+
         }
 
         // GET: Article/Edit/5
@@ -156,13 +164,13 @@ namespace LF.Controllers
             SelectListItem country = new SelectListItem()
             {
                 Value = new Guid("99bb22a8-c40c-43a6-8861-f92568a3268c").ToString(),
-                Text = "Bulgaria",
+                Text = "България",
                 Selected = true
             };
             SelectListItem country2 = new SelectListItem()
             {
                 Value = new Guid("ee792f95-941c-4509-8e24-bd552b5a0f99").ToString(),
-                Text = "Greece"
+                Text = "Сърбия"
             };
 
             countries.Add(country);
@@ -177,16 +185,27 @@ namespace LF.Controllers
             SelectListItem region = new SelectListItem()
             {
                 Value = new Guid("43261ad1-fd8b-4fd5-93d7-d06f54fb859f").ToString(),
-                Text = "Plovdiv"
+                Text = "София"
             };
             SelectListItem region2 = new SelectListItem()
             {
                 Value = new Guid("d978ecb7-6d93-4f61-b879-d21d0e680656").ToString(),
-                Text = "Sofia"
+                Text = "Пловдив"
             };
-
+            SelectListItem region3 = new SelectListItem()
+            {
+                Value = new Guid("43261ad1-fd8b-4fd5-93d7-d06f54fb859f").ToString(),
+                Text = "Варна"
+            };
+            SelectListItem region4 = new SelectListItem()
+            {
+                Value = new Guid("d978ecb7-6d93-4f61-b879-d21d0e680656").ToString(),
+                Text = "Бургас"
+            };
             regions.Add(region);
             regions.Add(region2);
+            regions.Add(region3);
+            regions.Add(region4);
             return regions;
         }
 
@@ -197,22 +216,34 @@ namespace LF.Controllers
             SelectListItem city = new SelectListItem()
             {
                 Value = new Guid("5b2bb2a6-35a8-4ad6-b77f-0ea34e466cab").ToString(),
-                Text = "Plovdiv"
+                Text = "Пловдив"
             };
             SelectListItem city2 = new SelectListItem()
             {
                 Value = new Guid("36269bb9-9e79-48c0-a45d-9d451be4f916").ToString(),
-                Text = "Sofia"
+                Text = "София"
             };
             SelectListItem city3 = new SelectListItem()
             {
                 Value = new Guid("900526f3-2f4c-4848-a773-90bbee3ae753").ToString(),
-                Text = "Pernik"
+                Text = "Варна"
+            };
+            SelectListItem city4 = new SelectListItem()
+            {
+                Value = new Guid("900526f3-2f4c-4848-a773-90bbee3ae753").ToString(),
+                Text = "Бургас"
+            };
+            SelectListItem city5 = new SelectListItem()
+            {
+                Value = new Guid("900526f3-2f4c-4848-a773-90bbee3ae753").ToString(),
+                Text = "Стара Загора"
             };
 
             cities.Add(city);
             cities.Add(city2);
             cities.Add(city3);
+            cities.Add(city4);
+            cities.Add(city5);
             return cities;
         }
 
@@ -223,22 +254,34 @@ namespace LF.Controllers
             SelectListItem category = new SelectListItem()
             {
                 Value = new Guid("a2d62bbe-8d32-4d4e-80c5-3ac3658664c2").ToString(),
-                Text = "Pets"
+                Text = "Животни"
             };
             SelectListItem category2 = new SelectListItem()
             {
                 Value = new Guid("7b118ea5-6a92-4b5d-bf93-91cda8848fc1").ToString(),
-                Text = "Jewels"
+                Text = "Бижута"
             };
             SelectListItem category3 = new SelectListItem()
             {
                 Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
-                Text = "People"
+                Text = "Документи"
+            };
+            SelectListItem category4 = new SelectListItem()
+            {
+                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
+                Text = "Багаж"
+            };
+            SelectListItem category5 = new SelectListItem()
+            {
+                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
+                Text = "Ел. устрйство"
             };
 
             categories.Add(category);
             categories.Add(category2);
             categories.Add(category3);
+            categories.Add(category4);
+            categories.Add(category5);
             return categories;
         }
 
@@ -248,18 +291,18 @@ namespace LF.Controllers
 
             SelectListItem size = new SelectListItem()
             {
-                Value = Convert.ToString((int)Sizes.Large),
-                Text = Sizes.Large.ToString()
+                Value = new Guid("a2d62bbe-8d32-4d4e-80c5-3ac3658664c2").ToString(),
+                Text = "Малко"
             };
             SelectListItem size2 = new SelectListItem()
             {
-                Value = Convert.ToString((int)Sizes.Medium),
-                Text = Sizes.Medium.ToString()
+                Value = new Guid("7b118ea5-6a92-4b5d-bf93-91cda8848fc1").ToString(),
+                Text = "Средно"
             };
             SelectListItem size3 = new SelectListItem()
             {
-                Value = Convert.ToString((int)Sizes.Small),
-                Text = Sizes.Small.ToString()
+                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
+                Text = "Голямо"
             };
 
             sizes.Add(size);

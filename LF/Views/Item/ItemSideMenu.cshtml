@@ -1,77 +1,48 @@
 ﻿@model LF.Models.MenuModel.MenuModel
 
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <p class="text-center" align="center"><b><u>Locations</u></b></p>
-    @Html.DropDownListFor(model => model.Cities, Model.Cities, "--Select City--", new { @class = "DDL", @style="margin-top:25px" })
-    @Html.DropDownListFor(model => model.Regions, Model.Regions, "--Select Region--", new { @class = "DDL" })
-    @Html.DropDownListFor(model => model.Categories, Model.Categories, "--Select Category--", new { @class = "DDL" })
+    <p class="text-center" align="center"><b><u>Категория</u></b></p>
+    @Html.DropDownListFor(model => model.Categories, Model.Categories, "--Избери--", new { @class = "DDL" })
     <hr />
-    <div class="col-md-12">
-        <font size="4"><b><u>Is item lost ?</u></b></font>
-        @Html.CheckBox("LostItem")
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <p class="text-center" align="center"><b><u>Локация</u></b></p>
+    @Html.DropDownListFor(model => model.Regions, Model.Regions, "--Област--", new { @class = "DDL" })
+    @Html.DropDownListFor(model => model.Cities, Model.Cities, "--Град--", new { @class = "DDL", @style = "margin-top:25px" })
+    <hr />
+    <div id="radioGroup">
+        <p class="text-center" align="center"><b><u>Размер</u></b></p>
+        <br />
+        <div>
+            <input id="r2" type="radio" name="group1" class="radio4" />
+            <label for="r2">Малък</label>
+        </div>
+        <br />
+        <div>
+            <input id="r3" type="radio" onclick="setRadioBtns();" name="group1" class="radio4" />
+            <label for="r3">Среден</label>
+        </div>
+        <br />
+        <div>
+            <input id="r4" type="radio" name="group1" class="radio4" />
+            <label for="r4">Голям</label>
+        </div>
         <hr />
     </div>
-    <div class="col-md-12">
-        <p class="text-center" align="center"><b><u>Size</u></b></p>
-        <br />
-        <font size="4">Small</font>
-        @Html.CheckBox("Small")
-        <br />
-        <font size="4">Medium</font>
-        @Html.CheckBox("LostItem")
-        <br />
-        <font size="4">Large</font>
-        @Html.CheckBox("LostItem")
+    <div>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+            <label class="onoffswitch-label" for="myonoffswitch">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
         <hr />
     </div>
-    <div class="col-md-12">
-        <p class="text-center" align="center"><b><u>Reward value</u></b></p>
+    <div>
+        <p class="text-center" align="center"><b><u>Парична награда</u></b></p>
         <br />
-        <input type="range" id="Range" value="90">
+        <input name="number" style="float:none;" placeholder="От" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+        <br />
+        <input name="number" style="float:none;" placeholder="До" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
     </div>
 </div>
-
-<!-- Use any element to open the sidenav -->
-<div>
-    <span id="filterMenu"><i class="fa fa-filter fa-5x" aria-hidden="true" onclick="openNav()"></i></span>
-</div>
-
-@*<div class="row Menu">
-        <font size="4"><b><u>Locations</u></b></font>
-        <div class="col-md-12">
-            @Html.DropDownListFor(model => model.Cities, Model.Cities, "--Select City--", new { @class = "form-control", @Id = "CityDDL" })
-        </div>
-        <div class="col-md-12">
-            @Html.DropDownListFor(model => model.Regions, Model.Regions, "--Select Region--", new { @class = "form-control", @Id = "RegionDDL" })
-            <hr />
-        </div>
-        <div class="col-md-12">
-            <font size="4"><b><u>Category</u></b></font>
-            @Html.DropDownListFor(model => model.Categories, Model.Categories, "--Select Category--", new { @class = "form-control", @Id = "CategoryDDL" })
-            <hr />
-        </div>
-        <div class="col-md-12">
-            <font size="4"><b><u>Is item lost ?</u></b></font>
-            @Html.CheckBox("LostItem")
-            <hr />
-        </div>
-        <div class="col-md-12">
-            <font size="4"><b><u>Size</u></b></font>
-            <br />
-            <label>Small</label>
-            @Html.CheckBox("Small")
-            <br />
-            <label>Medium</label>
-            @Html.CheckBox("LostItem")
-            <br />
-            <label>Large</label>
-            @Html.CheckBox("LostItem")
-            <hr />
-        </div>
-        <div class="col-md-12">
-            <font size="4"><b><u>Reward value</u></b></font>
-            <br />
-            <input type="range" id="Range" value="90">
-        </div>
-    </div>*@
