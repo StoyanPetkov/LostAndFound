@@ -2,20 +2,23 @@
 
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/itemView.css")" />
 
-<div class="row main-content" >
+<div class="row main-content">
     <div class="col-md-12" id="topMenu">
         @Html.ActionLink("Нова обява", "CreateItem", "Item", new { @class = "btn btn-default" })
         @Html.ActionLink("Мои обяви", "MyItems", "Item", new { @class = "btn btn-default" })
     </div>
-    <div id="inputSection" class="col-md-12">
+    <div id="inputSection">
         <!-- Use any element to open the sidenav -->
         <div>
             <span id="filterMenu"><i class="fa fa-filter fa-5x" aria-hidden="true" onclick="openNav()"></i></span>
         </div>
-        <div id="inputFilter">
-            <label for="inputdefault">Default input<input type="radio"/></label>
+        <div class="form-group" id="inputFilter">
+            <label for="inputdefault">Default input<input type="radio" /></label>
             <input class="form-control input-lg" id="inputdefault" type="text">
+
         </div>
+    </div>
+    <div id="itemGrid">
     </div>
 </div>
 

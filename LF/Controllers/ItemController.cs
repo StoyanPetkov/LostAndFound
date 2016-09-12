@@ -33,6 +33,42 @@ namespace LF.Controllers
             return Json(RenderHelper.PartialView(this, "ItemSideMenu", model),JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetItemGrid()
+        {
+            var userId = User.Identity.GetUserId();
+            List<ShowItemsVM> models = new List<ShowItemsVM>();
+            List<Item> items = _dataManager.ItemsGetForCurrentUser(userId).Result.ToList();
+            ShowItemsVM model = new ShowItemsVM();
+            foreach (var item in items)
+            {
+                model.Category = item.Category.CategoryName;
+                model.City = item.City.CityName;
+                model.CreatedOn = item.CreatedDate.ToString("MMMM dd, yyyy");
+                model.Description = item.Description;
+                model.ImageLocation = item.ImagesLocation;
+                model.IsLost = item.IsLost.ToString();
+                model.ItemId = item.Id;
+                model.Region = _dataManager.RegionGetById(item.City.RegionId).Result.RegionName;
+                model.RewardValue = item.RewardValue.ToString();
+                switch (item.Size)
+                {
+                    case 1: { model.Size = "Малък"; }
+                        break;
+                    case 2: { { model.Size = "Среден"; } }
+                        break;
+                    case 3: { { model.Size = "Голям"; } }
+                        break;
+                    default: { model.Size = "-"; }
+                        break;
+                }
+                model.Title = item.ItemName;
+                model.UserId = item.UserId;
+                model.UserId = item.User.FirstName + " " + item.User.LastName;
+            }
+           
+            return Json(RenderHelper.PartialView(this, "_ItemGridView", model), JsonRequestBehavior.AllowGet);
+        }
+
         #region CRUD
         // GET: Article
         public ActionResult Index()

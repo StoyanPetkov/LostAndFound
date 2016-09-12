@@ -14,44 +14,54 @@ namespace LF.Models
         [Required]
         public Guid UserId { get; set; }
 
-        [DataType(DataType.Text)]
         [Required(ErrorMessage = "Заглавието е задължително.")]
         [MaxLength(50,ErrorMessage = "Максимална дължина 50.")]
         public string Title { get; set; }
 
-        [DataType(DataType.Text)]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Категорията е задължителна.")]
         public Guid CategoryId { get; set; }
 
-        [DataType(DataType.DateTime)]
         public DateTime CreatedOn { get; set; }
 
-        [DataType(DataType.DateTime)]
         public DateTime ModifiedOn { get; set; }
 
         [Required(ErrorMessage = "Посочете дали предмета е загубен.")]
         public bool IsLost { get; set; }
 
-        public byte Size { get; set; }
+        public Guid Size { get; set; }
 
         [DataType(DataType.Currency)]
         public string RewardValue { get; set; }
 
-        [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "Електронната поща е задължителна.")]
         [MaxLength(50, ErrorMessage = "Максимална дължина 50.")]
         public string OwnerEmail { get; set; }
 
-        [DataType(DataType.Text)]
         [Display(Name = "Размер")]
         public IEnumerable<SelectListItem> Sizes { get; set; }
 
-        [DataType(DataType.Text)]
         [Display(Name = "Категория")]
         public IEnumerable<SelectListItem> Categories { get; set; }
 
         public string ImageLocation { get; set; }
+    }
+
+    public class ShowItemsVM
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string RewardValue { get; set; }
+        public string City { get; set; }
+        public string Region { get; set; }
+        public string Size { get; set; }
+        public string Category { get; set; }
+        public string ImageLocation { get; set; }
+        public string CreatedOn { get; set; }
+        public string IsLost { get; set; }
+        public Guid ItemId { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
     }
 }

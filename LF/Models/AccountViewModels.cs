@@ -105,13 +105,13 @@ namespace LF.Models
         [Display(Name = "City")]
         public IEnumerable<SelectListItem> Cities { get; set; }
 
-        [Required(ErrorMessage = "Country is required")]
+        [Required(ErrorMessage = "Изберете държава")]
         public Guid CountryId { get; set; }
 
-        [Required(ErrorMessage = "Region is required")]
+        [Required(ErrorMessage = "Изберете област")]
         public Guid RegionId { get; set; }
 
-        [Required(ErrorMessage = "City is required")]
+        [Required(ErrorMessage = "Изберете населено място")]
         public Guid CityId { get; set; }
     }
 

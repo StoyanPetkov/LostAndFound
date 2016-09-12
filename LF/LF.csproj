@@ -195,7 +195,12 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DataAccess\LFDataManager.cs" />
     <Compile Include="DataAccess\Repositories\BaseRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CategoryRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CityRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CommentsRepository.cs" />
+    <Compile Include="DataAccess\Repositories\CountryRepository.cs" />
     <Compile Include="DataAccess\Repositories\ItemRepository.cs" />
+    <Compile Include="DataAccess\Repositories\RegionRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -339,6 +344,7 @@
     <Content Include="Views\Item\CreateItem.cshtml" />
     <Content Include="Views\Item\ItemSideMenu.cshtml" />
     <Content Include="Views\Item\MyItems.cshtml" />
+    <Content Include="Views\Item\_ItemGridView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

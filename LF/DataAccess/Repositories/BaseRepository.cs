@@ -47,9 +47,9 @@ namespace LF.DataAccess.Repositories
             return (IObjectContextAdapter)this.Context;
         }
 
-        public virtual T GetById(int id)
+        public virtual Task<T> GetById(Guid id)
         {
-            return DbSet.Find(id);
+            return Task.FromResult(DbSet.Find(id));
         }
 
         public virtual Task<List<T>> GetAll(Expression<Func<T, bool>> filter = null)

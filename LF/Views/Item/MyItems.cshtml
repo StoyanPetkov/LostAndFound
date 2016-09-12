@@ -1,8 +1,40 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Моите обяви";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Моите обяви</h2>
 
+<button class="btn-primary" id="show">Show</button>
+
+<div id="itemGrid"></div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval"),
+    @Scripts.Render("~/bundles/customBundleScript"),
+}
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#show').click(function () {
+            $.ajax({
+                url: "/item/GetItemGrid",
+                //data: { name: username, type: usertype,id: id},
+                datatype: "json",
+                type: "get",
+                success: function (data) {
+                    var menu = $('#itemGrid');
+                    menu.append(data);
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        });
+
+    });
+</script>

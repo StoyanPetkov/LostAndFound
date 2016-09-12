@@ -173,10 +173,10 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.S
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csprojResolveAssemblyReference.cache
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.CreatingDBINITIALCOMMIT.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.RemoveitemspropertisActive.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.Removesomerequiredvaluesfromfields.resources
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csproj.GenerateResource.Cache
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.dll
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.pdb
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.RemoveitemspropertisActive.resources
-C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.Migrations.Removesomerequiredvaluesfromfields.resources
+C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\lf\LF\obj\Debug\LF.csprojResolveAssemblyReference.cache
