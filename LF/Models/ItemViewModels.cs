@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LF.Helpers;
 
 namespace LF.Models
 {
@@ -46,6 +47,10 @@ namespace LF.Models
         public IEnumerable<SelectListItem> Categories { get; set; }
 
         public string ImageLocation { get; set; }
+
+        [FileSize(507200)]
+        [FileTypes("jpg,jpeg,png")]
+        public HttpPostedFileBase file { get; set; }
     }
 
     public class ShowItemsVM

@@ -8,7 +8,6 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <script src=" https://use.fontawesome.com/2de92cc6c8.js "> </script> 
-    <link href="checkbox.css" rel="stylesheet">
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -47,6 +46,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/customBundleScript"),
+    @RenderSection("MyScripts", required: false)
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,40 +1,71 @@
-﻿@{
+﻿
+<style>
+    #itemGrid {
+        background-image: url('../../images/FreeGreatPicture.jpg');
+    }
+</style>
+@{
     ViewBag.Title = "Моите обяви";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Моите обяви</h2>
+<div id="itemGrid" class="row">
 
-<button class="btn-primary" id="show">Show</button>
+</div>
 
-<div id="itemGrid"></div>
-
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval"),
-    @Scripts.Render("~/bundles/customBundleScript"),
-}
-
-
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#show').click(function () {
+@section MyScripts {
+    <script type="text/javascript">
+        $(document).ready(function(){
             $.ajax({
                 url: "/item/GetItemGrid",
                 //data: { name: username, type: usertype,id: id},
                 datatype: "json",
                 type: "get",
                 success: function (data) {
-                    var menu = $('#itemGrid');
-                    menu.append(data);
+                    debugger;
+                    for (var k in data) {
+                        debugger;
+                        if (data.hasOwnProperty(k)) {
+                            var div = $('<div></div>')
+                            var a = $("<a></a>");
+                            var rows = Number(data.length) / 3;
+                            a.attr("href", "/item/ShowItem?itemId=" + data[k].ItemId);
+                            var img = $('<img id="theImg" height="350" width="350" src="' + data[k].ImageLocation + '" />');
+                            var spanDescription = $("<span><b>" + data[k].Title +'<b/>: ' +  data[k].Description + "</span>");
+                            spanDescription.addClass('descriptionSpan')
+                            a.append(img);
+                            a.append(spanDescription);
+                            div.append(a);
+                            div.css('background-color', '#d9d9d9')
+                            div.addClass('col-md-4')
+                            div.css('bckground-color','#3385ff')
+                            $('#itemGrid').prepend(div);
+                            $('#itemGrid >div> span').css('position', 'relative')
+                        }
+                    }
+                    $('#itemGrid > div> a > span.descriptionSpan').css({
+                        position: 'absolute',
+                        width: '280px',
+                        bottom: '25px',
+                        marginLeft: '32px',
+                        backgroundColor: "#000",
+                        left: '0px',
+                        fontSize: '18px',
+                        padding: '6px',
+                        color: 'white',
+                        filter: 'alpha(opacity=70)',
+                        opacity: '0.7'
+                    });
+                    $('#itemGrid > div> a > img').css({
+                        padding:'15px'
+                    });
                 },
                 error: function (data) {
-                    alert(data);
+                    alert(data.error);
                 }
             });
         });
 
-    });
-</script>
+    </script>
+}

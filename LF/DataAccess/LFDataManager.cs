@@ -29,6 +29,11 @@ namespace LF.DataAccess
 
         #region Item
 
+        public async Task ItemEdit(Item item)
+        {
+            await _itemRepository.Update(item);
+        }
+
         public async Task ItemAdd(Item item)
         {
             await _itemRepository.Insert(item);
@@ -37,6 +42,11 @@ namespace LF.DataAccess
         public Task<List<Item>> ItemsGetForCurrentUser(string userId)
         {
             return _itemRepository.GetAll(filter: x=> x.UserId == userId);
+        }
+
+        public Task<Item> ItemGetById(Guid itemId)
+        {
+            return _itemRepository.GetById(itemId);
         }
 
         #endregion

@@ -9,13 +9,15 @@
 <h2>Създаване на обява</h2>
 
 <div>
-    @using (Html.BeginForm("CreateItem", "Item", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("CreateItem", "Item", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
     {
-        @Html.HiddenFor(m=> m.UserId)
+        @Html.HiddenFor(m => m.UserId)
+        @Html.HiddenFor(m => m.ImageLocation)
         <div class="row createItem">
             <div class="col-md6 createItemLeft">
                 @Html.ValidationMessageFor(m => m.Title)
                 @Html.TextBoxFor(m => m.Title, new { @class = "form-control itemInput", @placeholder = "Заглавие" })
+
                 @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Описание", @rows = "5", @cols = "50" })
                 @Html.TextBoxFor(m => m.RewardValue, new { @class = "form-control", @placeholder = "Наградна стойност" })
                 <label>Контакти</label>
@@ -31,13 +33,23 @@
                 @Html.DropDownListFor(model => model.CityId, Model.Cities, "--Град--", new { @class = "form-control", @Id = "CitiesDDL" })
                 @Html.DropDownListFor(model => model.CategoryId, Model.Categories, "--Категория--", new { @class = "form-control", @Id = "CategoryDDL" })
                 @Html.DropDownListFor(model => model.Size, Model.Sizes, "--Размер--", new { @class = "form-control", @Id = "SizeDDL" })
-                @Html.LabelFor(m => m.IsLost, "Изгубена вещ ?")
-                @Html.CheckBoxFor(m => m.IsLost, new { @class = "" })
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                        <input form="isLost" type="checkbox" name="isLost" id="isLost" class="form-check-input">
+                        Изгубена вещ
+                    </label>
+                </div>
             </div>
             <br />
-
+            <div class="col-md-6">
+                @Html.ValidationMessageFor(model => model.file)
+                <label class="btn btn-success btn-file">
+                    Качи снимка <input type="file" id="file" name="file" style="display: none;">
+                </label>
+                <input type="submit" value="Запази" class="btn btn-success" id="submitBtn" />
+            </div>
         </div>
-        <input type="submit" value="Запази" class="btn-success" id="submitBtn"/>
+
     }
 </div>
 

@@ -11,6 +11,8 @@ using LF.DataAccess;
 using System.Threading.Tasks;
 using LF.Helpers;
 using LF.Models.MenuModel;
+using System.Text;
+using System.IO;
 
 namespace LF.Controllers
 {
@@ -30,7 +32,7 @@ namespace LF.Controllers
             model.Regions = GetRegions();
             model.Cities = GetCities();
             model.Sizes = GetSizes();
-            return Json(RenderHelper.PartialView(this, "ItemSideMenu", model),JsonRequestBehavior.AllowGet);
+            return Json(RenderHelper.PartialView(this, "ItemSideMenu", model), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetItemGrid()
@@ -38,9 +40,9 @@ namespace LF.Controllers
             var userId = User.Identity.GetUserId();
             List<ShowItemsVM> models = new List<ShowItemsVM>();
             List<Item> items = _dataManager.ItemsGetForCurrentUser(userId).Result.ToList();
-            ShowItemsVM model = new ShowItemsVM();
             foreach (var item in items)
             {
+                ShowItemsVM model = new ShowItemsVM();
                 model.Category = item.Category.CategoryName;
                 model.City = item.City.CityName;
                 model.CreatedOn = item.CreatedDate.ToString("MMMM dd, yyyy");
@@ -52,21 +54,39 @@ namespace LF.Controllers
                 model.RewardValue = item.RewardValue.ToString();
                 switch (item.Size)
                 {
-                    case 1: { model.Size = "Малък"; }
+                    case 1:
+                        { model.Size = "Малък"; }
                         break;
-                    case 2: { { model.Size = "Среден"; } }
+                    case 2:
+                        { { model.Size = "Среден"; } }
                         break;
-                    case 3: { { model.Size = "Голям"; } }
+                    case 3:
+                        { { model.Size = "Голям"; } }
                         break;
-                    default: { model.Size = "-"; }
+                    default:
+                        { model.Size = "-"; }
                         break;
                 }
                 model.Title = item.ItemName;
                 model.UserId = item.UserId;
                 model.UserId = item.User.FirstName + " " + item.User.LastName;
+                models.Add(model);
             }
-           
-            return Json(RenderHelper.PartialView(this, "_ItemGridView", model), JsonRequestBehavior.AllowGet);
+
+            return Json(models, JsonRequestBehavior.AllowGet);//RenderHelper.PartialView(this, "_ItemGridView", models)
+        }
+
+        public async Task<ActionResult> MyItems()
+        {
+            CreateItemVM model = new CreateItemVM();
+            return View(model);
+        }
+
+        public ActionResult ShowItem(Guid itemId)
+        {
+            var item = _dataManager.ItemGetById(itemId).Result;
+            ShowItemsVM model = PopulateShowItemVM(item);
+            return View(model);
         }
 
         #region CRUD
@@ -103,33 +123,99 @@ namespace LF.Controllers
         {
             try
             {
+                TryUpdateModel(model);
+
                 if (!ModelState.IsValid)
                 {
                     model = PopulateDropDownLists(model);
                     return View(model);
                 }
 
+                string directory = null;
+                string userDirectory = null;
+                string fileLocation = null;
+                StringBuilder trailingPath = null;
+                string newDirectory = null;
+                string oldDirectory = null;
                 Item item = new Item();
-                item.UserId = model.UserId.ToString();
-                item.CityId = model.CityId;
-                item.ImagesLocation = model.ImageLocation ?? "";
-                item.IsDeleted = false;
-                item.IsLost = model.IsLost;
-                item.ItemName = model.Title;
-                item.Description = model.Description;
-                item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
-                item.CategoryId = model.CategoryId;
+  
                 if (model.ItemId != null)
                 {
-                    item.ModifiedDate = DateTime.UtcNow;
-                }
-                else
-                {
+                    item.UserId = model.UserId.ToString();
+                    item.CityId = model.CityId;
+                    item.ImagesLocation = model.ImageLocation ?? "";
+                    item.IsDeleted = false;
+                    item.IsLost = model.IsLost;
+                    item.ItemName = model.Title;
+                    item.Description = model.Description;
+                    item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
+                    item.CategoryId = model.CategoryId;
                     item.CreatedDate = DateTime.UtcNow;
+                    if (model.file != null)
+                    {
+                        if (item.ImagesLocation != null)
+                        {
+                            int index = model.ImageLocation.LastIndexOf(@"/");
+                            string str = model.ImageLocation.Substring(index + 1);
+                            oldDirectory = Path.Combine(directory + userDirectory + @"\" + str);
+                        }
+                        directory = Server.MapPath(@"~/images/");
+                        userDirectory = User.Identity.Name;
+                        trailingPath = new StringBuilder(Path.GetExtension(model.file.FileName));
+                        trailingPath.Insert(0, User.Identity.GetUserId());
+                        fileLocation = Path.Combine(directory, userDirectory, trailingPath.ToString());
+                        if (!Directory.Exists(directory + userDirectory))
+                        {
+                            Directory.CreateDirectory(directory + userDirectory);
+                        }
+                        model.file.SaveAs(fileLocation);
+
+                        newDirectory = @"/images/" + userDirectory + "/" + trailingPath;
+
+                        if (item.ImagesLocation == null)
+                        {
+                            item.ImagesLocation = newDirectory;
+                        }
+
+                        if (item.ImagesLocation != newDirectory)
+                        {
+                            System.IO.File.Delete(oldDirectory);
+                            item.ImagesLocation = newDirectory;
+                        }
+                    }
+                    await _dataManager.ItemEdit(item);
                 }
 
-                await _dataManager.ItemAdd(item);
+                if (model.ItemId == null)
+                {
+                    item.UserId = User.Identity.GetUserId();
+                    item.CityId = model.CityId;
+                    item.ImagesLocation = model.ImageLocation ?? "";
+                    item.IsDeleted = false;
+                    item.IsLost = model.IsLost;
+                    item.ItemName = model.Title;
+                    item.Description = model.Description;
+                    item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
+                    item.CategoryId = model.CategoryId;
+                    item.CreatedDate = DateTime.UtcNow;
 
+                    if (model.file != null)
+                    {
+                        directory = Server.MapPath(@"~/images/");
+                        userDirectory = User.Identity.Name;
+                        trailingPath = new StringBuilder(Path.GetExtension(model.file.FileName));
+                        trailingPath.Insert(0, Guid.NewGuid());
+                        fileLocation = Path.Combine(directory, userDirectory, trailingPath.ToString());
+                        if (!Directory.Exists(directory + userDirectory))
+                        {
+                            Directory.CreateDirectory(directory + userDirectory);
+                        }
+                        model.file.SaveAs(fileLocation);
+                        newDirectory = @"/images/" + userDirectory + "/" + trailingPath;
+                        item.ImagesLocation = newDirectory;
+                        await _dataManager.ItemAdd(item);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -139,12 +225,9 @@ namespace LF.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> MyItems()
-        {
-            CreateItemVM model = new CreateItemVM();
-            return View(model);
+       
 
-        }
+      
 
         // GET: Article/Edit/5
         public ActionResult Edit(int id)
@@ -363,6 +446,39 @@ namespace LF.Controllers
             Medium = 2,
             Large = 3
 
+        }
+
+        private ShowItemsVM PopulateShowItemVM(Item item)
+        {
+            ShowItemsVM model = new ShowItemsVM();
+            model.Category = item.Category.CategoryName;
+            model.City = item.City.CityName;
+            model.CreatedOn = item.CreatedDate.ToString("MMMM dd, yyyy");
+            model.Description = item.Description;
+            model.ImageLocation = item.ImagesLocation;
+            model.IsLost = item.IsLost.ToString();
+            model.ItemId = item.Id;
+            model.Region = _dataManager.RegionGetById(item.City.RegionId).Result.RegionName;
+            model.RewardValue = item.RewardValue.ToString();
+            switch (item.Size)
+            {
+                case 1:
+                    { model.Size = "Малък"; }
+                    break;
+                case 2:
+                    { { model.Size = "Среден"; } }
+                    break;
+                case 3:
+                    { { model.Size = "Голям"; } }
+                    break;
+                default:
+                    { model.Size = "-"; }
+                    break;
+            }
+            model.Title = item.ItemName;
+            model.UserId = item.UserId;
+            model.UserId = item.User.FirstName + " " + item.User.LastName;
+            return model;
         }
         #endregion
     }

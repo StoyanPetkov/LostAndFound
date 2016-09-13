@@ -204,6 +204,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\FileSizeAttribute.cs" />
+    <Compile Include="Helpers\FileTypesAttribute.cs" />
     <Compile Include="Helpers\RenderHelper.cs" />
     <Compile Include="Migrations\201608031802114_Creating DB - INITIAL COMMIT.cs" />
     <Compile Include="Migrations\201608031802114_Creating DB - INITIAL COMMIT.Designer.cs">
@@ -285,6 +287,9 @@
     <Content Include="Content\scss\_variables.scss" />
     <Content Include="Content\scss\sidebar-menu.scss" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="images\default.jpg" />
+    <Content Include="images\FreeGreatPicture.jpg" />
+    <Content Include="images\white-wallpapers.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\CustomCSS\registerView.css" />
@@ -345,6 +350,7 @@
     <Content Include="Views\Item\ItemSideMenu.cshtml" />
     <Content Include="Views\Item\MyItems.cshtml" />
     <Content Include="Views\Item\_ItemGridView.cshtml" />
+    <Content Include="Views\Item\ShowItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

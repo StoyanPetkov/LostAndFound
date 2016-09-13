@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    
+
     $.ajax({
         url: "/item/getsidemenu",
         //data: { name: username, type: usertype,id: id},
@@ -14,4 +14,12 @@
         }
     });
 
+    $('#isLost').on('click', function () {
+        debugger;
+        if ($(this).is(":checked")) {
+            alert('Clicked')
+        } else {
+            alert('notChecked')
+        }
+    })
 });

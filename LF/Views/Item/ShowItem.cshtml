@@ -1,0 +1,51 @@
+﻿@using LF.Models;
+@model ShowItemsVM
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/itemView.css")" />
+<style>
+    div #itemGrid {
+        background-image: url('../../images/FreeGreatPicture.jpg');
+    }
+</style>
+
+@{
+    ViewBag.Title = "ShowItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row ItemDescriptionWrapper" style="margin-top:50px;">
+    <div class="col-md-6">
+        <img src="@Model.ImageLocation" width="500" height="500" class="img-responsive" id="ItemImage alt=" @Model.Title " />
+        <ul>
+            <li>
+                Размер: @Model.Size
+            </li>
+            <li>
+
+                Категория: @Model.Category
+            </li>
+            <li>
+
+                Награда: @Model.RewardValue
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <div class="">
+            <h2 class="text-center"><u><i><b>@Model.Title</b></i></u></h2>
+            <textarea id="itemDescription">Описание: @Model.Description</textarea>
+            <br />
+            <ul>
+                <li>
+                    Област: @Model.Region
+                </li>
+                <li>
+                    Собственик: @Model.UserName
+                </li>
+                <li>
+                    Град: @Model.City
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
