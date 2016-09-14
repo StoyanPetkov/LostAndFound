@@ -31,7 +31,7 @@ namespace LF.Models
         [Required(ErrorMessage = "Посочете дали предмета е загубен.")]
         public bool IsLost { get; set; }
 
-        public Guid Size { get; set; }
+        public string Size { get; set; }
 
         [DataType(DataType.Currency)]
         public string RewardValue { get; set; }

@@ -41,12 +41,17 @@ namespace LF.DataAccess
 
         public Task<List<Item>> ItemsGetForCurrentUser(string userId)
         {
-            return _itemRepository.GetAll(filter: x=> x.UserId == userId);
+            return _itemRepository.GetAll(filter: x => x.UserId == userId && !x.IsDeleted);
         }
 
         public Task<Item> ItemGetById(Guid itemId)
         {
             return _itemRepository.GetById(itemId);
+        }
+
+        public Task ItemDelete(Item item)
+        {
+            return _itemRepository.Update(item);
         }
 
         #endregion
@@ -58,26 +63,46 @@ namespace LF.DataAccess
             return _regionRepository.GetById(regionId);
         }
 
+        public Task<List<Region>> RegionsGetAll()
+        {
+            return _regionRepository.GetAll(filter: x => !x.IsDeleted);
+        }
+        #endregion
 
         #region Comment
 
         #endregion
 
-        #endregion
-
-        #region Region
-
-        #endregion
-
         #region City
+
+        public Task<List<City>> CitiesByRegionGetAll(Guid regionId)
+        {
+            return _cityRepository.GetAll(filter: x => !x.IsDeleted && x.RegionId == regionId);
+        }
 
         #endregion
 
         #region Country
 
+        public Task<List<Country>> CountriesGetAll()
+        {
+            return _countryRepository.GetAll(filter: x=> !x.IsDeleted);
+        }
+
         #endregion
 
         #region Category
+
+        public Task<List<Category>> CategoriesGetAll()
+        {
+            return _categoryRepository.GetAll(filter: x => !x.IsDeleted);
+        }
+
+
+        public Task<Category> CategoryById(Guid id)
+        {
+            return _categoryRepository.GetById(id);
+        }
 
         #endregion
     }

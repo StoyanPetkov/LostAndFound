@@ -3,16 +3,16 @@
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/itemView.css")" />
 
 @{
-    ViewBag.Title = "Нова обява";
+    ViewBag.Title = "Редактиране";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Създаване на обява</h2>
+<h2>Редактиране на обява</h2>
 
 <div>
-    @using (Html.BeginForm("CreateItem", "Item", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Edit", "Item", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
     {
-        @Html.HiddenFor(m => m.UserId)
         @Html.HiddenFor(m => m.ImageLocation)
+        @Html.HiddenFor(m => m.ItemId)
         <div class="row createItem">
             <div class="col-md6 createItemLeft">
                 @Html.ValidationMessageFor(m => m.Title)
@@ -40,7 +40,6 @@
                         Изгубена вещ
                     </label>
                 </div>
-               
             </div>
             <br />
             <div class="col-md-6">
@@ -55,7 +54,15 @@
     }
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval"),
-    @Scripts.Render("~/bundles/customBundleScript"),
+@section MyScripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            var isLost =@Html.Raw(Json.Encode(Model.IsLost));
+            if (isLost)
+            {
+                $('#isLost').attr('checked','checked');
+            };
+        });
+    </script>
 }

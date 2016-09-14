@@ -1,4 +1,6 @@
 ﻿@using LF.Models;
+@using Microsoft.AspNet.Identity;
+
 @model ShowItemsVM
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/itemView.css")" />
 <style>
@@ -12,16 +14,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <div class="row ItemDescriptionWrapper" style="margin-top:50px;">
     <div class="col-md-6">
-        <img src="@Model.ImageLocation" width="500" height="500" class="img-responsive" id="ItemImage alt=" @Model.Title " />
+        <img src="@Model.ImageLocation" width="500" height="500" class="img-responsive" id="ItemImage" alt="@Model.Title" />
         <ul>
             <li>
                 Размер: @Model.Size
             </li>
             <li>
-
                 Категория: @Model.Category
             </li>
             <li>
@@ -33,6 +33,18 @@
     <div class="col-md-6">
         <div class="">
             <h2 class="text-center"><u><i><b>@Model.Title</b></i></u></h2>
+            @{
+                if (Model.UserId == User.Identity.GetUserId())
+                {
+                    <span>
+                        @Html.ActionLink("Изтрии", "Delete", "Item", new { id = Model.ItemId }, null)
+                    </span>
+                    <span>
+                        @Html.ActionLink("Редактирай", "Edit", "Item", new { id = Model.ItemId }, null)
+                    </span>
+
+                }
+            }
             <textarea id="itemDescription">Описание: @Model.Description</textarea>
             <br />
             <ul>

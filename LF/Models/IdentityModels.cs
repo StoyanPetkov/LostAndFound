@@ -38,8 +38,6 @@ namespace LF.Models
 
     }
 
-
-
     public class City
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

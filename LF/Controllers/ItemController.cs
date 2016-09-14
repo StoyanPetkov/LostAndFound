@@ -25,14 +25,22 @@ namespace LF.Controllers
             _dataManager = new LFDataManager();
         }
 
+        #region Ajax
+
         public JsonResult GetSideMenu()
         {
             MenuModel model = new MenuModel();
-            model.Categories = GetCategories();
-            model.Regions = GetRegions();
-            model.Cities = GetCities();
-            model.Sizes = GetSizes();
+            model.Categories = GetCategories(null);
+            model.Regions = GetRegions(null);
+            model.Cities = new List<SelectListItem>();//GetCities();
+            model.Sizes = GetSizes(0);
             return Json(RenderHelper.PartialView(this, "ItemSideMenu", model), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult getCities(Guid regionId)
+        {
+            var cities = GetCities(regionId, null);
+            return Json(cities, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetItemGrid()
@@ -76,11 +84,7 @@ namespace LF.Controllers
             return Json(models, JsonRequestBehavior.AllowGet);//RenderHelper.PartialView(this, "_ItemGridView", models)
         }
 
-        public async Task<ActionResult> MyItems()
-        {
-            CreateItemVM model = new CreateItemVM();
-            return View(model);
-        }
+        #endregion
 
         public ActionResult ShowItem(Guid itemId)
         {
@@ -89,35 +93,35 @@ namespace LF.Controllers
             return View(model);
         }
 
+        public ActionResult MyItems()
+        {
+            CreateItemVM model = new CreateItemVM();
+            return View(model);
+        }
+
         #region CRUD
-        // GET: Article
+        // GET: Item
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: Article/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Article/Create
+        // GET: Item/Create
         public ActionResult CreateItem()
         {
             CreateItemVM model = new CreateItemVM();
             model.UserId = Guid.Parse(User.Identity.GetUserId());
             model.OwnerEmail = User.Identity.GetUserName();
-            model.Countries = GetCountries();
-            model.Regions = GetRegions();
-            model.Cities = GetCities();
-            model.Categories = GetCategories();
-            model.Sizes = GetSizes();
+            model.Countries = GetCountries(null);
+            model.Regions = GetRegions(null);
+            model.Cities = new List<SelectListItem>();//GetCities();
+            model.Categories = GetCategories(null);
+            model.Sizes = GetSizes(0);
 
             return View(model);
         }
 
-        // POST: Article/Create
+        // POST: Item/Create
         [HttpPost]
         public async Task<ActionResult> CreateItem(CreateItemVM model)
         {
@@ -136,12 +140,11 @@ namespace LF.Controllers
                 string fileLocation = null;
                 StringBuilder trailingPath = null;
                 string newDirectory = null;
-                string oldDirectory = null;
                 Item item = new Item();
-  
-                if (model.ItemId != null)
+
+                if (!model.ItemId.HasValue)
                 {
-                    item.UserId = model.UserId.ToString();
+                    item.UserId = User.Identity.GetUserId();
                     item.CityId = model.CityId;
                     item.ImagesLocation = model.ImageLocation ?? "";
                     item.IsDeleted = false;
@@ -151,6 +154,118 @@ namespace LF.Controllers
                     item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
                     item.CategoryId = model.CategoryId;
                     item.CreatedDate = DateTime.UtcNow;
+                    Sizes sizeType = (Sizes)Enum.Parse(typeof(Sizes), model.Size);
+                    switch (sizeType)
+                    {
+                        case Sizes.Голям:
+                            {
+                                item.Size = (int)Sizes.Голям;
+                            };
+                            break;
+                        case Sizes.Малък:
+                            {
+                                item.Size = (int)Sizes.Малък;
+                            };
+                            break;
+                        case Sizes.Среден:
+                            {
+                                item.Size = (int)Sizes.Среден;
+                            };
+                            break;
+                        default:
+                            throw new ArgumentException("sizeType not valid");
+                    }
+                    if (model.file != null)
+                    {
+                        directory = Server.MapPath(@"~/images/");
+                        userDirectory = User.Identity.Name;
+                        trailingPath = new StringBuilder(Path.GetExtension(model.file.FileName));
+                        trailingPath.Insert(0, Guid.NewGuid());
+                        fileLocation = Path.Combine(directory, userDirectory, trailingPath.ToString());
+                        if (!Directory.Exists(directory + userDirectory))
+                        {
+                            Directory.CreateDirectory(directory + userDirectory);
+                        }
+                        model.file.SaveAs(fileLocation);
+                        newDirectory = @"/images/" + userDirectory + "/" + trailingPath;
+                        item.ImagesLocation = newDirectory;
+                        await _dataManager.ItemAdd(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                //log ex
+                //throw err msg
+            }
+            return RedirectToAction("Index");
+        }
+
+        // GET: Item/Edit
+        public ActionResult Edit(Guid id)
+        {
+            CreateItemVM model = new CreateItemVM();
+            if (id != null)
+            {
+                model = PopulateEditItemVM(id);
+            }
+            return View(model);
+        }
+
+        // POST: Item/Edit
+        [HttpPost]
+        public async Task<ActionResult> Edit(CreateItemVM model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    if (model.ItemId.HasValue)
+                    {
+                        model = PopulateEditItemVM(model.ItemId.Value);
+                    }
+                    return View(Task.FromResult(model));
+                }
+                string directory = null;
+                string userDirectory = null;
+                string fileLocation = null;
+                StringBuilder trailingPath = null;
+                string newDirectory = null;
+                string oldDirectory = null;
+
+                if (model.ItemId.HasValue)
+                {
+                    Item item = _dataManager.ItemGetById(model.ItemId.Value).Result;
+                    item.CityId = model.CityId;
+                    item.ImagesLocation = model.ImageLocation ?? "";
+                    item.IsLost = model.IsLost;
+                    item.ItemName = model.Title;
+                    item.Description = model.Description;
+                    item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
+                    item.CategoryId = model.CategoryId;
+                    item.ModifiedDate = DateTime.UtcNow;
+                    Sizes sizeType = (Sizes)Enum.Parse(typeof(Sizes), model.Size);
+                    switch (sizeType)
+                    {
+                        case Sizes.Голям:
+                            {
+                                item.Size = (int)Sizes.Голям;
+                            };
+                            break;
+                        case Sizes.Малък:
+                            {
+                                item.Size = (int)Sizes.Малък;
+                            };
+                            break;
+                        case Sizes.Среден:
+                            {
+                                item.Size = (int)Sizes.Среден;
+                            };
+                            break;
+                        default:
+                            throw new ArgumentException("sizeType not valid");
+                    }
                     if (model.file != null)
                     {
                         if (item.ImagesLocation != null)
@@ -186,86 +301,23 @@ namespace LF.Controllers
                     await _dataManager.ItemEdit(item);
                 }
 
-                if (model.ItemId == null)
-                {
-                    item.UserId = User.Identity.GetUserId();
-                    item.CityId = model.CityId;
-                    item.ImagesLocation = model.ImageLocation ?? "";
-                    item.IsDeleted = false;
-                    item.IsLost = model.IsLost;
-                    item.ItemName = model.Title;
-                    item.Description = model.Description;
-                    item.RewardValue = (float)Convert.ToDouble(model.RewardValue);
-                    item.CategoryId = model.CategoryId;
-                    item.CreatedDate = DateTime.UtcNow;
-
-                    if (model.file != null)
-                    {
-                        directory = Server.MapPath(@"~/images/");
-                        userDirectory = User.Identity.Name;
-                        trailingPath = new StringBuilder(Path.GetExtension(model.file.FileName));
-                        trailingPath.Insert(0, Guid.NewGuid());
-                        fileLocation = Path.Combine(directory, userDirectory, trailingPath.ToString());
-                        if (!Directory.Exists(directory + userDirectory))
-                        {
-                            Directory.CreateDirectory(directory + userDirectory);
-                        }
-                        model.file.SaveAs(fileLocation);
-                        newDirectory = @"/images/" + userDirectory + "/" + trailingPath;
-                        item.ImagesLocation = newDirectory;
-                        await _dataManager.ItemAdd(item);
-                    }
-                }
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                //log ex
-                //throw err msg
-            }
-            return RedirectToAction("Index");
-        }
-
-       
-
-      
-
-        // GET: Article/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Article/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
+                string msg = ex.Message;
                 return View();
             }
         }
 
-        // GET: Article/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Article/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                var item = _dataManager.ItemGetById(id).Result;
+                item.IsDeleted = true;
+                await _dataManager.ItemDelete(item);
+                return RedirectToAction("MyItems");
             }
             catch
             {
@@ -276,176 +328,81 @@ namespace LF.Controllers
         #endregion
 
         #region supportive
-        private List<SelectListItem> GetCountries()
+        private List<SelectListItem> GetCountries(string selectedCountry)
         {
             List<SelectListItem> countries = new List<SelectListItem>();
-
-            SelectListItem country = new SelectListItem()
-            {
-                Value = new Guid("99bb22a8-c40c-43a6-8861-f92568a3268c").ToString(),
-                Text = "България",
-                Selected = true
-            };
-            SelectListItem country2 = new SelectListItem()
-            {
-                Value = new Guid("ee792f95-941c-4509-8e24-bd552b5a0f99").ToString(),
-                Text = "Сърбия"
-            };
-
-            countries.Add(country);
-            countries.Add(country2);
-            return countries;
+            var countris = _dataManager.CountriesGetAll().Result;
+            return countries = DDL.ToDropDownList(countris, selectedCountry);
         }
 
-        private List<SelectListItem> GetRegions()
+        private List<SelectListItem> GetRegions(string selectedRegion)
         {
             List<SelectListItem> regions = new List<SelectListItem>();
-
-            SelectListItem region = new SelectListItem()
-            {
-                Value = new Guid("43261ad1-fd8b-4fd5-93d7-d06f54fb859f").ToString(),
-                Text = "София"
-            };
-            SelectListItem region2 = new SelectListItem()
-            {
-                Value = new Guid("d978ecb7-6d93-4f61-b879-d21d0e680656").ToString(),
-                Text = "Пловдив"
-            };
-            SelectListItem region3 = new SelectListItem()
-            {
-                Value = new Guid("43261ad1-fd8b-4fd5-93d7-d06f54fb859f").ToString(),
-                Text = "Варна"
-            };
-            SelectListItem region4 = new SelectListItem()
-            {
-                Value = new Guid("d978ecb7-6d93-4f61-b879-d21d0e680656").ToString(),
-                Text = "Бургас"
-            };
-            regions.Add(region);
-            regions.Add(region2);
-            regions.Add(region3);
-            regions.Add(region4);
-            return regions;
+            var regionss = _dataManager.RegionsGetAll().Result;
+            return regions = DDL.ToDropDownList(regionss, selectedRegion);
         }
 
-        private List<SelectListItem> GetCities()
+        private List<SelectListItem> GetCities(Guid regionId, string selectedCity)
         {
             List<SelectListItem> cities = new List<SelectListItem>();
-
-            SelectListItem city = new SelectListItem()
-            {
-                Value = new Guid("5b2bb2a6-35a8-4ad6-b77f-0ea34e466cab").ToString(),
-                Text = "Пловдив"
-            };
-            SelectListItem city2 = new SelectListItem()
-            {
-                Value = new Guid("36269bb9-9e79-48c0-a45d-9d451be4f916").ToString(),
-                Text = "София"
-            };
-            SelectListItem city3 = new SelectListItem()
-            {
-                Value = new Guid("900526f3-2f4c-4848-a773-90bbee3ae753").ToString(),
-                Text = "Варна"
-            };
-            SelectListItem city4 = new SelectListItem()
-            {
-                Value = new Guid("900526f3-2f4c-4848-a773-90bbee3ae753").ToString(),
-                Text = "Бургас"
-            };
-            SelectListItem city5 = new SelectListItem()
-            {
-                Value = new Guid("900526f3-2f4c-4848-a773-90bbee3ae753").ToString(),
-                Text = "Стара Загора"
-            };
-
-            cities.Add(city);
-            cities.Add(city2);
-            cities.Add(city3);
-            cities.Add(city4);
-            cities.Add(city5);
+            var citis = _dataManager.CitiesByRegionGetAll(regionId).Result;
+            cities = DDL.ToDropDownList(citis, selectedCity);
             return cities;
         }
 
-        private List<SelectListItem> GetCategories()
+        private List<SelectListItem> GetCategories(string selectedCategory)
         {
             List<SelectListItem> categories = new List<SelectListItem>();
-
-            SelectListItem category = new SelectListItem()
-            {
-                Value = new Guid("a2d62bbe-8d32-4d4e-80c5-3ac3658664c2").ToString(),
-                Text = "Животни"
-            };
-            SelectListItem category2 = new SelectListItem()
-            {
-                Value = new Guid("7b118ea5-6a92-4b5d-bf93-91cda8848fc1").ToString(),
-                Text = "Бижута"
-            };
-            SelectListItem category3 = new SelectListItem()
-            {
-                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
-                Text = "Документи"
-            };
-            SelectListItem category4 = new SelectListItem()
-            {
-                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
-                Text = "Багаж"
-            };
-            SelectListItem category5 = new SelectListItem()
-            {
-                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
-                Text = "Ел. устрйство"
-            };
-
-            categories.Add(category);
-            categories.Add(category2);
-            categories.Add(category3);
-            categories.Add(category4);
-            categories.Add(category5);
-            return categories;
+            var categoris = _dataManager.CategoriesGetAll().Result;
+            return categories = DDL.ToDropDownList(categoris, selectedCategory);
         }
 
-        private List<SelectListItem> GetSizes()
+        private List<SelectListItem> GetSizes(int sizeType)
         {
             List<SelectListItem> sizes = new List<SelectListItem>();
-
             SelectListItem size = new SelectListItem()
             {
-                Value = new Guid("a2d62bbe-8d32-4d4e-80c5-3ac3658664c2").ToString(),
-                Text = "Малко"
+                Value = Sizes.Малък.ToString(),
+                Text = Sizes.Малък.ToString()
             };
             SelectListItem size2 = new SelectListItem()
             {
-                Value = new Guid("7b118ea5-6a92-4b5d-bf93-91cda8848fc1").ToString(),
-                Text = "Средно"
+                Value = Sizes.Среден.ToString(),
+                Text = Sizes.Среден.ToString()
             };
             SelectListItem size3 = new SelectListItem()
             {
-                Value = new Guid("41c3e50f-6c9e-4e04-9f2f-13bb1029ea64").ToString(),
-                Text = "Голямо"
+                Value = Sizes.Голям.ToString(),
+                Text = Sizes.Голям.ToString()
             };
 
             sizes.Add(size);
             sizes.Add(size2);
             sizes.Add(size3);
+
+            Sizes razmer = (Sizes)sizeType;
+
+            if (sizeType > 0 && sizeType < 4)
+            {
+                foreach (var type in sizes)
+                {
+                    if (type.Value == razmer.ToString())
+                    {
+                        type.Selected = true;
+                    }
+                }
+            }
             return sizes;
         }
 
         private CreateItemVM PopulateDropDownLists(CreateItemVM model)
         {
-            model.Countries = GetCountries();
-            model.Regions = GetRegions();
-            model.Cities = GetCities();
-            model.Categories = GetCategories();
-            model.Sizes = GetSizes();
+            model.Countries = GetCountries(null);
+            model.Regions = GetRegions(null);
+            model.Cities = new List<SelectListItem>();//GetCities();
+            model.Categories = GetCategories(null);
+            model.Sizes = GetSizes(0);
             return model;
-        }
-
-        public enum Sizes
-        {
-            Small = 1,
-            Medium = 2,
-            Large = 3
-
         }
 
         private ShowItemsVM PopulateShowItemVM(Item item)
@@ -477,8 +434,47 @@ namespace LF.Controllers
             }
             model.Title = item.ItemName;
             model.UserId = item.UserId;
-            model.UserId = item.User.FirstName + " " + item.User.LastName;
+            model.UserName = item.User.FirstName + " " + item.User.LastName;
             return model;
+        }
+
+        private CreateItemVM PopulateEditItemVM(Guid itemId)
+        {
+            var item = _dataManager.ItemGetById(itemId).Result;
+            CreateItemVM model = new CreateItemVM();
+            model.ItemId = item.Id;
+            model.UserId = Guid.Parse(User.Identity.GetUserId());
+            model.OwnerEmail = User.Identity.GetUserName();
+            var countries = GetCountries(_dataManager.CountriesGetAll().Result.FirstOrDefault().CountryName);
+            model.Countries = countries;
+            model.CountryId = new Guid(countries.Where(x => x.Selected == true).FirstOrDefault().Value);
+            var regions = GetRegions(_dataManager.RegionGetById(item.City.RegionId).Result.RegionName);
+            model.Regions = regions;
+            model.RegionId = new Guid(regions.Where(x => x.Selected == true).FirstOrDefault().Value);
+            var cities = GetCities(item.City.RegionId, item.City.CityName);
+            model.Cities = cities;
+            model.CityId = new Guid(cities.Where(x => x.Selected == true).FirstOrDefault().Value);
+            var categories = GetCategories(_dataManager.CategoryById(item.CategoryId).Result.CategoryName);
+            model.Categories = categories;
+            model.CategoryId = new Guid(categories.Where(x => x.Selected == true).FirstOrDefault().Value);
+            var sizes = GetSizes((int)item.Size);
+            model.Sizes = sizes;
+            model.Size = sizes.Where(x => x.Selected).FirstOrDefault().Value;
+            model.Description = item.Description;
+            model.Title = item.ItemName;
+            model.RewardValue = item.RewardValue.ToString();
+            model.ImageLocation = item.ImagesLocation;
+            model.CreatedOn = item.CreatedDate;
+            model.IsLost = item.IsLost;
+            return model;
+        }
+
+        public enum Sizes
+        {
+            Малък = 1,
+            Среден = 2,
+            Голям = 3
+
         }
         #endregion
     }

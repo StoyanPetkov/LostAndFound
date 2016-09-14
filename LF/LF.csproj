@@ -204,6 +204,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DDL.cs" />
     <Compile Include="Helpers\FileSizeAttribute.cs" />
     <Compile Include="Helpers\FileTypesAttribute.cs" />
     <Compile Include="Helpers\RenderHelper.cs" />
@@ -351,6 +352,7 @@
     <Content Include="Views\Item\MyItems.cshtml" />
     <Content Include="Views\Item\_ItemGridView.cshtml" />
     <Content Include="Views\Item\ShowItem.cshtml" />
+    <Content Include="Views\Item\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
