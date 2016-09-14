@@ -13,6 +13,7 @@ using LF.Helpers;
 using LF.Models.MenuModel;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace LF.Controllers
 {
@@ -77,11 +78,79 @@ namespace LF.Controllers
                 }
                 model.Title = item.ItemName;
                 model.UserId = item.UserId;
-                model.UserId = item.User.FirstName + " " + item.User.LastName;
+                model.UserName = item.User.FirstName + " " + item.User.LastName;
                 models.Add(model);
             }
 
-            return Json(models, JsonRequestBehavior.AllowGet);//RenderHelper.PartialView(this, "_ItemGridView", models)
+            return Json(models, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Filter(
+            string category,
+            string region,
+            string city,
+            string isLost,
+            string size,
+            string from,
+            string to)
+        {
+            List<ShowItemsVM> models = new List<ShowItemsVM>();
+            var regionId = new Guid();
+            if (region != null) {
+                regionId = _dataManager.RegionGetById(new Guid(region)).Result.RegionId;
+            }
+
+            List<Item> items = await _dataManager.ItemsGetAll();
+
+            items = items.Where(x => x.CategoryId == new Guid(category) && 
+                                     x.CityId == new Guid(city) && 
+                                     x.City.Region.RegionId == new Guid(region) && 
+                                     x.IsDeleted == false &&
+                                     x.IsLost == Convert.ToBoolean(isLost) &&
+                                     x.RewardValue >= float.Parse(from, CultureInfo.InvariantCulture.NumberFormat)  &&
+                                     x.RewardValue <= float.Parse(to, CultureInfo.InvariantCulture.NumberFormat))
+                                     .ToList();
+            foreach (var item in items)
+            {
+                ShowItemsVM model = new ShowItemsVM();
+                model.Category = item.Category.CategoryName;
+                model.City = item.City.CityName;
+                model.CreatedOn = item.CreatedDate.ToString("MMMM dd, yyyy");
+                model.Description = item.Description;
+                model.ImageLocation = item.ImagesLocation;
+                model.IsLost = item.IsLost.ToString();
+                model.ItemId = item.Id;
+                model.Region = _dataManager.RegionGetById(item.City.RegionId).Result.RegionName;
+                model.RewardValue = item.RewardValue.ToString();
+                model.Title = item.ItemName;
+                model.UserId = item.UserId;
+                model.UserName = item.User.FirstName + " " + item.User.LastName;
+                model.Size = "";
+                //switch (item.Size.Value)
+                //{
+                //    case (int)Sizes.Голям:
+                //        {
+                //            model.Size = Sizes.Голям.ToString();
+                //        };
+                //        break;
+                //    case (int)Sizes.Малък:
+                //        {
+                //            model.Size = Sizes.Малък.ToString();
+                //        };
+                //        break;
+                //    case (int)Sizes.Среден:
+                //        {
+                //            model.Size = Sizes.Среден.ToString();
+                //        };
+                //        break;
+                //    default:
+                //        model.Size = "";
+                //        break;
+                //}
+                models.Add(model);
+            }
+            return Json(models, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
@@ -467,6 +536,34 @@ namespace LF.Controllers
             model.CreatedOn = item.CreatedDate;
             model.IsLost = item.IsLost;
             return model;
+        }
+
+        private string SetSize(byte size)
+        {
+            string sizeName = ""; ;
+
+            //Sizes sizeType = (Sizes)Enum.Parse(typeof(Sizes), size);
+            switch (size)
+            {
+                case (int)Sizes.Голям:
+                    {
+                        sizeName = Sizes.Голям.ToString();
+                    };
+                    break;
+                case (int)Sizes.Малък:
+                    {
+                        sizeName = Sizes.Малък.ToString();
+                    };
+                    break;
+                case (int)Sizes.Среден:
+                    {
+                        sizeName = Sizes.Среден.ToString();
+                    };
+                    break;
+                default:
+                    return sizeName;
+            }
+            return sizeName;
         }
 
         public enum Sizes

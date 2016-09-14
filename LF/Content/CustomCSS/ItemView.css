@@ -208,7 +208,7 @@ body .sidenav > font {
     background-color: #111; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.8s; /* 0.5 second transition effect to slide in the sidenav */
+    transition: 1.1s; /* 0.5 second transition effect to slide in the sidenav */
     color: #818181;
 }
 
@@ -245,24 +245,40 @@ body .sidenav > font {
     margin-top: 30px;
 }
 
+    #inputSection input {
+        margin-top:7px;
+    }
+
+#searchBtn {
+    margin-top:8px;
+}
+
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
     transition: margin-left .5s;
     padding: 20px;
 }
 
-#inputFilter {
+#itemGrid {
+    margin-top:30px;
+}
+
+#grid {
+    margin-top:50px;
+}
+
+/*#inputFilter {
     margin-left: 35px;
 }
 
     #inputFilter input {
         margin-left: 35px;
         width: 50%;
-    }
+    }*/
 
-#inputdefault {
+/*#inputdefault {
     width: 70%;
-}
+}*/
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {

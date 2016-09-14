@@ -28,6 +28,10 @@ namespace LF.DataAccess
         }
 
         #region Item
+        public async Task<List<Item>> ItemsGetAll()
+        {
+            return await _itemRepository.GetAll();
+        }
 
         public async Task ItemEdit(Item item)
         {

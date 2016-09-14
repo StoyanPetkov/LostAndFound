@@ -36,10 +36,10 @@
             @{
                 if (Model.UserId == User.Identity.GetUserId())
                 {
-                    <span>
-                        @Html.ActionLink("Изтрии", "Delete", "Item", new { id = Model.ItemId }, null)
+                    <span class="btn btn-warning">
+                        @Html.ActionLink("Изтрии", "Delete", "Item", new { id = Model.ItemId }, new { @id="deleteBtn"})
                     </span>
-                    <span>
+                    <span class="btn btn-default">
                         @Html.ActionLink("Редактирай", "Edit", "Item", new { id = Model.ItemId }, null)
                     </span>
 

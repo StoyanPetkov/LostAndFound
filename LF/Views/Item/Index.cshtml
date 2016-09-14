@@ -7,15 +7,17 @@
         @Html.ActionLink("Нова обява", "CreateItem", "Item", new { @class = "btn btn-default" })
         @Html.ActionLink("Мои обяви", "MyItems", "Item", new { @class = "btn btn-default" })
     </div>
-    <div id="inputSection">
+    <div id="inputSection" class="col-md-12">
         <!-- Use any element to open the sidenav -->
         <div>
-            <span id="filterMenu"><i class="fa fa-filter fa-5x" aria-hidden="true" onclick="openNav()"></i></span>
+            <span id="filterMenu"><i class="fa fa-filter fa-4x" aria-hidden="true" onclick="openNav()"></i></span>
         </div>
-        <div class="form-group" id="inputFilter">
-            <label for="inputdefault">Default input<input type="radio" /></label>
-            <input class="form-control input-lg" id="inputdefault" type="text">
-
+        <div class="col-md-8">
+            <input class="form-control input-lg" id="inputdefault" type="text" placeholder="Търсене">
+        </div>
+        <div class="col-md-1">
+            @*col-md-offset-1*@
+            <span class="btn btn-primary fa fa-search fa-2x" aria-hidden="true" id="searchBtn">Намери</span>
         </div>
     </div>
     <div id="itemGrid">
@@ -27,22 +29,129 @@
         ViewBag.Title = "Обяви";
         Layout = "~/Views/Shared/_Layout.cshtml";
     }
+    <div id="grid" class="row">
+
+    </div>
 </div>
 
 <script type="text/javascript">
-    /* Set the width of the side navigation to 250px */
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-        $('.DDL').css('margin-top', '25px')
-    }
 
-    /* Set the width of the side navigation to 0 */
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
 </script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval"),
     @Scripts.Render("~/bundles/customBundleScript"),
+}
+@section MyScripts {
+    <script type="text/javascript">
+
+        /* Set the width of the side navigation to 250px */
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            $('.DDL').css('margin-top', '25px')
+        }
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        function filter(option) {
+            debugger;
+            var data = [{
+                categoryId: '',
+                regionId: '',
+                cityId: '',
+                lostFound: '',
+                sizeType: '',
+                fromValue: '',
+                toValue: '',
+            }]
+            if (option != null) {
+                data = option;
+            }
+            $.ajax({
+                url: "/item/Filter",
+                data: {
+                   category : data[0].categoryId,
+                   region: data[0].regionId,
+                   city: data[0].cityId,
+                   isLost: data[0].lostFound,
+                   size: data[0].sizeType,
+                   from: data[0].fromValue,
+                   to: data[0].toValue
+                },
+                datatype: "json",
+                type: "post",
+                success: function (data) {
+                    for (var k in data) {
+                        if (data.hasOwnProperty(k)) {
+                            var div = $('<div></div>')
+                            var a = $("<a></a>");
+                            var rows = Number(data.length) / 3;
+                            a.attr("href", "/item/ShowItem?itemId=" + data[k].ItemId);
+                            var img = $('<img id="theImg" height="350" width="350" src="' + data[k].ImageLocation + '" />');
+                            var spanDescription = $("<span><b>" + data[k].Title + '<b />: ' + data[k].Description + "</span>");
+                            spanDescription.addClass('descriptionSpan')
+                            a.append(img);
+                            a.append(spanDescription);
+                            div.append(a);
+                            div.css('background-color', '#d9d9d9')
+                            div.addClass('col-md-4')
+                            div.css('bckground-color', '#3385ff')
+                            $('#grid').prepend(div);
+                            $('#grid >div> span').css('position', 'relative')
+                        }
+                    }
+                    $('#grid > div> a > span.descriptionSpan').css({
+                        position: 'absolute',
+                        width: '280px',
+                        bottom: '25px',
+                        marginLeft: '32px',
+                        backgroundColor: "#000",
+                        left: '0px',
+                        fontSize: '18px',
+                        padding: '6px',
+                        color: 'white',
+                        filter: 'alpha(opacity=70)',
+                        opacity: '0.7'
+                    });
+                    $('#grid > div> a > img').css({
+                        padding: '15px'
+                    });
+
+                },
+                error: function (data) {
+                    alert(data.error);
+                }
+            }).then(function () {
+                $('#searchBtn').on('click', function () {
+                    debugger;
+                    var size;
+                    $.each($('#radioGroup input'), function (index, el) {
+                        if ($(el).is(':checked')) {
+                            size = $(el).siblings().text();
+                        }
+                    })
+
+                    var filterOptions = [
+                        {
+                            categoryId: $('#categoriesDDL').val(),
+                            regionId: $('#regionsDDL').val(),
+                            cityId: $('#cityDDL').val(),
+                            lostFound: $('#myonoffswitch').val(),
+                            sizeType: size,
+                            fromValue: $('#fromValueInput').val(),
+                            toValue: $('#toValueInput').val()
+                        }
+                    ];
+                    filter(filterOptions);
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            filter();
+        });
+    </script>
 }
