@@ -90,9 +90,18 @@ namespace LF.Controllers
         public async Task<JsonResult> HotItems()
         {
             List<ShowItemsVM> models = new List<ShowItemsVM>();
-            List<Item> items = await _dataManager.ItemsGetAll();
+            List<Item> items = await _dataManager.HotItemsGet();
 
-            foreach (var item in items.Take(4))
+            if (items.Count < 2)
+            {
+                items = _dataManager.ItemsGetAll().Result.OrderBy(x => x.CreatedDate).Take(4).ToList();
+            }
+            else if (items.Count > 6)
+            {
+                items = items.OrderBy(x=> x.CreatedDate).Take(4).ToList();
+            }
+
+            foreach (var item in items)
             {
                 ShowItemsVM model = new ShowItemsVM();
                 model.Category = item.Category.CategoryName;
@@ -128,52 +137,45 @@ namespace LF.Controllers
                 string regionId = filterOptions.RegionId ?? null;
                 string fromValue = filterOptions.FromValue ?? null;
                 string toValue = filterOptions.FromValue ?? null;
-                items = items.Where(x => !x.IsDeleted &&
+                string inputValue = filterOptions.InputValue ?? null;
+                string itemSize = filterOptions.SizeType ?? null;
+                items = items.Where(x => (inputValue != null ? x.ItemName.Contains(inputValue.Trim()) : true) &&
                                          (categoryId != null ? x.CategoryId == new Guid(categoryId) : true) &&
                                          (cityId != null ? x.CityId == new Guid(cityId) : true) &&
                                          (regionId != null ? x.City.RegionId == new Guid(regionId) : true) &&
                                          (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true) &&
                                          (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true) &&
                                          x.IsLost == !Convert.ToBoolean(filterOptions.LostFound) &&
-                                         x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
-                                                   filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
-                                                   filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0)
+                                         (itemSize != null ? x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
+                                                    filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
+                                                    filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0) : true)
                                         )
                                         .ToList();
 
-                //items = items.Where(x => !x.IsDeleted &&
-                //                         (categoryId != null ? x.CategoryId == new Guid(categoryId) : true)).ToList();
+                //items = items.Where(x => (inputValue != null ? x.ItemName.Contains(inputValue.Trim()) : true)).ToList();
 
-                //items = items.Where(x => !x.IsDeleted &&
-                //                        (cityId != null ? x.CityId == new Guid(cityId) : true)).ToList();
+                //items = items.Where(x => (categoryId != null ? x.CategoryId == new Guid(categoryId) : true)).ToList();
 
-                //items = items.Where(x => !x.IsDeleted &&
-                //                       (regionId != null ? x.City.RegionId == new Guid(regionId) : true)).ToList();
+                //items = items.Where(x => (cityId != null ? x.CityId == new Guid(cityId) : true)).ToList();
 
-                //items = items.Where(x => !x.IsDeleted &&
-                //                     (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
+                //items = items.Where(x => (regionId != null ? x.City.RegionId == new Guid(regionId) : true)).ToList();
 
-                //items = items.Where(x => !x.IsDeleted &&
-                //                     (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
+                //items = items.Where(x => (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
+
+                //items = items.Where(x => (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
 
                 //bool lost = !Convert.ToBoolean(filterOptions.LostFound);
 
-                //items = items.Where(x => !x.IsDeleted &&
-                //                     (x.IsLost == lost)).ToList();
+                //items = items.Where(x => (x.IsLost == lost)).ToList();
 
-                //var size = (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
-                //                                   filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
-                //                                   filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0);
-
-                //items = items.Where(x => !x.IsDeleted &&
-                //                    (x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
-                //                                   filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
-                //                                   filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0))).ToList();
+                //items = items.Where(x => (itemSize != null ? x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
+                //                                    filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
+                //                                    filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0) : true)).ToList();
 
 
             }
 
-            foreach (var item in items)
+            foreach (var item in items.OrderBy(x=> x.CreatedDate))
             {
                 ShowItemsVM model = new ShowItemsVM();
                 model.Category = item.Category.CategoryName;
@@ -441,6 +443,7 @@ namespace LF.Controllers
         #endregion
 
         #region supportive
+
         private List<SelectListItem> GetCountries(string selectedCountry)
         {
             List<SelectListItem> countries = new List<SelectListItem>();
@@ -640,6 +643,7 @@ namespace LF.Controllers
             Голям = 3
 
         }
+
         #endregion
     }
 }

@@ -68,7 +68,7 @@
                     {
                         debugger;
                         $('.hotItems').html('');
-                        var div = $('<div><h2"><b class="text-center">Hot Items</b></h4></div>')
+                        var div = $('<div><h2"><b class="text-center">Горещи обяви</b></h4></div>')
                         div.css('margin','10px')
                         $('.hotItems').prepend(div);
                     for (var k in data) {
@@ -159,37 +159,42 @@
                                 $('#grid >div> span').css('position', 'relative')
                             }
                         }
-                        $('#grid > div> a > span.descriptionSpan').css({
-                            position: 'absolute',
-                            width: '280px',
-                            bottom: '25px',
-                            marginLeft: '32px',
-                            backgroundColor: "#000",
-                            left: '0px',
-                            fontSize: '18px',
-                            padding: '6px',
-                            color: 'white',
-                            filter: 'alpha(opacity=70)',
-                            opacity: '0.7'
-                        });
+
+                        if ($('#grid').html() != '') {
+                            $('#grid > div> a > span.descriptionSpan').css({
+                                position: 'absolute',
+                                width: '280px',
+                                bottom: '25px',
+                                marginLeft: '32px',
+                                backgroundColor: "#000",
+                                left: '0px',
+                                fontSize: '18px',
+                                padding: '6px',
+                                color: 'white',
+                                filter: 'alpha(opacity=70)',
+                                opacity: '0.7'
+                            });
+                        }
 
                         $('#grid > div> a > img').css({
                             padding: '15px'
                         });
 
                         $('.refreshBtn').click(function () {
-                            $('#categoriesDDL').val(''),
-                            $('#regionsDDL').val(''),
-                            $('#cityDDL').val(''),
+                            $('#categoriesDDL').val('');
+                            $('#regionsDDL').val('');
+                            $('#cityDDL').val('');
                             $.each($('#radioGroup input'), function (index, el) {
                                 if ($(el).is(':checked')) {
                                     $(el).prop('checked', '');
                                 }
-                            })
-                            $('#myonoffswitch').prop('checked', '')
-
-                            $('#fromValueInput').val(''),
-                            $('#toValueInput').val('')
+                            });
+                            debugger;
+                            $('#myonoffswitch').removeAttr("checked");
+                            $('#myonoffswitch').data("changed", "false");
+                            $('#inputdefault').val('');
+                            $('#fromValueInput').val('');
+                            $('#toValueInput').val('');
                         });
                     }
                 },
@@ -198,6 +203,11 @@
             }
         })
             .then(function () {
+                
+                $('#myonoffswitch').click(function () {
+                    $('#myonoffswitch').data("changed", "true")
+                });
+
                 $('#searchBtn').on('click', function () {
                     var size;
                     $.each($('#radioGroup input'), function (index, el) {
@@ -205,19 +215,23 @@
                             size = $(el).siblings().text();
                         }
                     })
-
-
                     var filterOptions = [
                         {
                             CategoryId: $('#categoriesDDL').val(),
                             RegionId: $('#regionsDDL').val(),
                             CityId: $('#cityDDL').val(),
-                            LostFound: $('#myonoffswitch').is("checked"),
+                            LostFound: "",
                             SizeType: size,
                             FromValue: $('#fromValueInput').val(),
-                            ToValue: $('#toValueInput').val()
+                            ToValue: $('#toValueInput').val(),
+                            inputValue: $('#inputdefault').val()
                         }
                     ];
+                    debugger;
+                    var isLost = $('#myonoffswitch').data("changed");
+                    if (isLost === "true") {
+                        filterOptions[0].LostFound = $('#myonoffswitch').is(":checked").toString();
+                    }
                     filter(filterOptions);
                 });
             });

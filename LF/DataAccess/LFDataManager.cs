@@ -28,6 +28,19 @@ namespace LF.DataAccess
         }
 
         #region Item
+
+        public Task<List<Item>> HotItemsGet()
+        {
+            float averageRW = _itemRepository.GetAll().Result.Average(x => x.RewardValue).Value;
+
+            var items = _itemRepository.GetAll(filter:
+               x => x.RewardValue > averageRW).Result;
+
+            items = items.Where(x => x.CreatedDate > DateTime.Now.AddDays(-14)).ToList();
+            items = items.Where(x => x.ImagesLocation != null & x.ImagesLocation != "").ToList();
+            return Task.FromResult(items);
+        }
+
         public async Task<List<Item>> ItemsGetAll()
         {
             return await _itemRepository.GetAll(filter: x=> !x.IsDeleted);

@@ -78,6 +78,7 @@ namespace LF.Models
         public string LostFound { get; set; }
         public string RegionId { get; set; }
         public string SizeType { get; set; }
-        public string ToValue { get; set; }              
+        public string ToValue { get; set; }
+        public string InputValue { get; set; }
     }
 }
