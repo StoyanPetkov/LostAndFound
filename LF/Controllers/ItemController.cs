@@ -14,6 +14,7 @@ using LF.Models.MenuModel;
 using System.Text;
 using System.IO;
 using System.Globalization;
+using System.Reflection;
 
 namespace LF.Controllers
 {
@@ -28,27 +29,27 @@ namespace LF.Controllers
 
         #region Ajax
 
-        public JsonResult GetSideMenu()
+        public Task<JsonResult> GetSideMenu()
         {
             MenuModel model = new MenuModel();
             model.Categories = GetCategories(null);
             model.Regions = GetRegions(null);
             model.Cities = new List<SelectListItem>();//GetCities();
             model.Sizes = GetSizes(0);
-            return Json(RenderHelper.PartialView(this, "ItemSideMenu", model), JsonRequestBehavior.AllowGet);
+            return Task.FromResult(Json(RenderHelper.PartialView(this, "ItemSideMenu", model), JsonRequestBehavior.AllowGet));
         }
 
-        public JsonResult getCities(Guid regionId)
+        public Task<JsonResult> getCities(Guid regionId)
         {
             var cities = GetCities(regionId, null);
-            return Json(cities, JsonRequestBehavior.AllowGet);
+            return Task.FromResult(Json(cities, JsonRequestBehavior.AllowGet));
         }
 
-        public JsonResult GetItemGrid()
+        public async Task<JsonResult> GetItemGrid()
         {
             var userId = User.Identity.GetUserId();
             List<ShowItemsVM> models = new List<ShowItemsVM>();
-            List<Item> items = _dataManager.ItemsGetForCurrentUser(userId).Result.ToList();
+            List<Item> items =  await _dataManager.ItemsGetForCurrentUser(userId);
             foreach (var item in items)
             {
                 ShowItemsVM model = new ShowItemsVM();
@@ -86,31 +87,92 @@ namespace LF.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Filter(
-            string category,
-            string region,
-            string city,
-            string isLost,
-            string size,
-            string from,
-            string to)
+        public async Task<JsonResult> HotItems()
         {
             List<ShowItemsVM> models = new List<ShowItemsVM>();
-            var regionId = new Guid();
-            if (region != null) {
-                regionId = _dataManager.RegionGetById(new Guid(region)).Result.RegionId;
-            }
-
             List<Item> items = await _dataManager.ItemsGetAll();
 
-            items = items.Where(x => x.CategoryId == new Guid(category) && 
-                                     x.CityId == new Guid(city) && 
-                                     x.City.Region.RegionId == new Guid(region) && 
-                                     x.IsDeleted == false &&
-                                     x.IsLost == Convert.ToBoolean(isLost) &&
-                                     x.RewardValue >= float.Parse(from, CultureInfo.InvariantCulture.NumberFormat)  &&
-                                     x.RewardValue <= float.Parse(to, CultureInfo.InvariantCulture.NumberFormat))
-                                     .ToList();
+            foreach (var item in items.Take(4))
+            {
+                ShowItemsVM model = new ShowItemsVM();
+                model.Category = item.Category.CategoryName;
+                model.City = item.City.CityName;
+                model.CreatedOn = item.CreatedDate.ToString("MMMM dd, yyyy");
+                model.Description = item.Description;
+                model.ImageLocation = item.ImagesLocation;
+                model.IsLost = item.IsLost.ToString();
+                model.ItemId = item.Id;
+                model.Region = _dataManager.RegionGetById(item.City.RegionId).Result.RegionName;
+                model.RewardValue = item.RewardValue.ToString();
+                model.Title = item.ItemName;
+                model.UserId = item.UserId;
+                model.UserName = item.User.FirstName + " " + item.User.LastName;
+                model.Size = "";
+
+                models.Add(model);
+            }
+            return Json(models, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Filter(FilterModel filterOptions)
+        {
+            List<ShowItemsVM> models = new List<ShowItemsVM>();
+            List<Item> items = await _dataManager.ItemsGetAll();
+
+            //filtering
+            if (!IsAnyNullOrEmpty(filterOptions))
+            {
+                string categoryId = filterOptions.CategoryId ?? null;
+                string cityId = filterOptions.CityId ?? null;
+                string regionId = filterOptions.RegionId ?? null;
+                string fromValue = filterOptions.FromValue ?? null;
+                string toValue = filterOptions.FromValue ?? null;
+                items = items.Where(x => !x.IsDeleted &&
+                                         (categoryId != null ? x.CategoryId == new Guid(categoryId) : true) &&
+                                         (cityId != null ? x.CityId == new Guid(cityId) : true) &&
+                                         (regionId != null ? x.City.RegionId == new Guid(regionId) : true) &&
+                                         (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true) &&
+                                         (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true) &&
+                                         x.IsLost == !Convert.ToBoolean(filterOptions.LostFound) &&
+                                         x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
+                                                   filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
+                                                   filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0)
+                                        )
+                                        .ToList();
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                         (categoryId != null ? x.CategoryId == new Guid(categoryId) : true)).ToList();
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                        (cityId != null ? x.CityId == new Guid(cityId) : true)).ToList();
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                       (regionId != null ? x.City.RegionId == new Guid(regionId) : true)).ToList();
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                     (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                     (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
+
+                //bool lost = !Convert.ToBoolean(filterOptions.LostFound);
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                     (x.IsLost == lost)).ToList();
+
+                //var size = (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
+                //                                   filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
+                //                                   filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0);
+
+                //items = items.Where(x => !x.IsDeleted &&
+                //                    (x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
+                //                                   filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
+                //                                   filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0))).ToList();
+
+
+            }
+
             foreach (var item in items)
             {
                 ShowItemsVM model = new ShowItemsVM();
@@ -127,27 +189,7 @@ namespace LF.Controllers
                 model.UserId = item.UserId;
                 model.UserName = item.User.FirstName + " " + item.User.LastName;
                 model.Size = "";
-                //switch (item.Size.Value)
-                //{
-                //    case (int)Sizes.Голям:
-                //        {
-                //            model.Size = Sizes.Голям.ToString();
-                //        };
-                //        break;
-                //    case (int)Sizes.Малък:
-                //        {
-                //            model.Size = Sizes.Малък.ToString();
-                //        };
-                //        break;
-                //    case (int)Sizes.Среден:
-                //        {
-                //            model.Size = Sizes.Среден.ToString();
-                //        };
-                //        break;
-                //    default:
-                //        model.Size = "";
-                //        break;
-                //}
+
                 models.Add(model);
             }
             return Json(models, JsonRequestBehavior.AllowGet);
@@ -155,9 +197,9 @@ namespace LF.Controllers
 
         #endregion
 
-        public ActionResult ShowItem(Guid itemId)
+        public async Task<ActionResult> ShowItem(Guid itemId)
         {
-            var item = _dataManager.ItemGetById(itemId).Result;
+            var item = await _dataManager.ItemGetById(itemId);
             ShowItemsVM model = PopulateShowItemVM(item);
             return View(model);
         }
@@ -242,7 +284,8 @@ namespace LF.Controllers
                             };
                             break;
                         default:
-                            throw new ArgumentException("sizeType not valid");
+                            item.Size = 0;
+                            break;
                     }
                     if (model.file != null)
                     {
@@ -333,7 +376,8 @@ namespace LF.Controllers
                             };
                             break;
                         default:
-                            throw new ArgumentException("sizeType not valid");
+                            item.Size = 0;
+                            break;
                     }
                     if (model.file != null)
                     {
@@ -444,14 +488,20 @@ namespace LF.Controllers
                 Value = Sizes.Голям.ToString(),
                 Text = Sizes.Голям.ToString()
             };
+            SelectListItem size0 = new SelectListItem()
+            {
+                Value = Sizes.Неопределен.ToString(),
+                Text = Sizes.Неопределен.ToString()
+            };
 
             sizes.Add(size);
             sizes.Add(size2);
             sizes.Add(size3);
+            sizes.Add(size0);
 
             Sizes razmer = (Sizes)sizeType;
 
-            if (sizeType > 0 && sizeType < 4)
+            if (sizeType >= 0 && sizeType < 4)
             {
                 foreach (var type in sizes)
                 {
@@ -566,8 +616,25 @@ namespace LF.Controllers
             return sizeName;
         }
 
+        private bool IsAnyNullOrEmpty(object Object)
+        {
+            foreach (PropertyInfo property in Object.GetType().GetProperties())
+            {
+                if (property.PropertyType == typeof(string))
+                {
+                    string value = (string)property.GetValue(Object);
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public enum Sizes
         {
+            Неопределен = 0,
             Малък = 1,
             Среден = 2,
             Голям = 3

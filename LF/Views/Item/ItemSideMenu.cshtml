@@ -5,6 +5,7 @@
     @Html.DropDownListFor(model => model.Categories, Model.Categories, "--Избери--", new { @class = "DDL", @id = "categoriesDDL" })
     <hr />
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="javascript:void(0)" ><i class="refreshBtn fa fa-refresh fa-2x" aria-hidden="true" onclick="refreshMenu()"></i></a>
     <p class="text-center" align="center"><b><u>Локация</u></b></p>
     @Html.DropDownListFor(model => model.Regions, Model.Regions, "--Област--", new { @class = "DDL", @id = "regionsDDL" })
     @Html.DropDownListFor(model => model.Cities, Model.Cities, "--Град--", new { @class = "DDL", @id = "cityDDL", @style = "margin-top:25px" })
@@ -51,7 +52,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
            
-
         });
     </script>
 }

@@ -28,30 +28,30 @@ textarea {
 }
 
 .ItemDescriptionWrapper {
-    padding:10px;
+    padding: 10px;
 }
 
-.ItemDescriptionWrapper li:hover {
-    background-color: #111111;
-    transition: margin 0.3s ease-in 0s;
-}
+    .ItemDescriptionWrapper li:hover {
+        background-color: #111111;
+        transition: margin 0.3s ease-in 0s;
+    }
 
-.ItemDescriptionWrapper li {
-    float: left;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-}
+    .ItemDescriptionWrapper li {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 16px;
+        text-decoration: none;
+    }
 
-.ItemDescriptionWrapper ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333333;
-}
+    .ItemDescriptionWrapper ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333333;
+    }
 
 #submitBtn {
     margin-top: 15px;
@@ -78,9 +78,9 @@ body .Menu div > select {
     font-size: 12px;
 }
 
-#ItemImage img{
-    width:500px;
-    height:400px;
+#ItemImage img {
+    width: 500px;
+    height: 400px;
     max-width: 100%;
     max-height: 100%;
     border-radius: 25px;
@@ -90,7 +90,7 @@ body .Menu div > select {
     border: none;
     background-color: #d9d9d9;
     width: 100%;
-    height:218px;
+    height: 218px;
 }
 
 .sidenav > p, u, b {
@@ -175,6 +175,17 @@ body .sidenav > font {
         text-align: right;
     }
 
+.hotItems {
+    position:absolute;
+    right:-365px;
+    top: 100px;
+    padding-bottom:20px;
+}
+
+.myItemsBtn {
+    color:white;
+}
+
 .onoffswitch-switch {
     display: block;
     width: 17px;
@@ -240,17 +251,25 @@ body .sidenav > font {
         margin-left: 50px;
     }
 
+body .sidenav .refreshBtn {
+    position: absolute;
+    top: 0;
+    margin-left: 10px;
+    margin-top: 12px;
+}
+
 #inputSection {
     display: inline-flex;
     margin-top: 30px;
 }
 
-    #inputSection input {
-        margin-top:7px;
-    }
+body #inputSection input {
+    margin-top: 7px;
+    max-width: 100%;
+}
 
 #searchBtn {
-    margin-top:8px;
+    margin-top: 8px;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
@@ -260,11 +279,11 @@ body .sidenav > font {
 }
 
 #itemGrid {
-    margin-top:30px;
+    margin-top: 30px;
 }
 
 #grid {
-    margin-top:50px;
+    margin-top: 50px;
 }
 
 /*#inputFilter {

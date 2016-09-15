@@ -20,7 +20,9 @@
             <span class="btn btn-primary fa fa-search fa-2x" aria-hidden="true" id="searchBtn">Намери</span>
         </div>
     </div>
-    <div id="itemGrid">
+    <div id="itemGrid" class="col-md-9">
+    </div>
+    <div class="hotItems col-md-3 text-center" style="background-color:indianred">
     </div>
 </div>
 
@@ -39,8 +41,8 @@
 </script>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval"),
-    @Scripts.Render("~/bundles/customBundleScript"),
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/customBundleScript")
 }
 @section MyScripts {
     <script type="text/javascript">
@@ -56,77 +58,147 @@
             document.getElementById("mySidenav").style.width = "0";
         }
 
-        function filter(option) {
-            debugger;
-            var data = [{
-                categoryId: '',
-                regionId: '',
-                cityId: '',
-                lostFound: '',
-                sizeType: '',
-                fromValue: '',
-                toValue: '',
-            }]
-            if (option != null) {
-                data = option;
-            }
-            $.ajax({
-                url: "/item/Filter",
-                data: {
-                   category : data[0].categoryId,
-                   region: data[0].regionId,
-                   city: data[0].cityId,
-                   isLost: data[0].lostFound,
-                   size: data[0].sizeType,
-                   from: data[0].fromValue,
-                   to: data[0].toValue
-                },
-                datatype: "json",
-                type: "post",
+        function hotItems() {
+            jQuery.ajax({
+                type: "POST",
+                url: "@Url.Action("HotItems")",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
                 success: function (data) {
+                    {
+                        debugger;
+                        $('.hotItems').html('');
+                        var div = $('<div><h2"><b class="text-center">Hot Items</b></h4></div>')
+                        div.css('margin','10px')
+                        $('.hotItems').prepend(div);
                     for (var k in data) {
                         if (data.hasOwnProperty(k)) {
                             var div = $('<div></div>')
                             var a = $("<a></a>");
                             var rows = Number(data.length) / 3;
                             a.attr("href", "/item/ShowItem?itemId=" + data[k].ItemId);
-                            var img = $('<img id="theImg" height="350" width="350" src="' + data[k].ImageLocation + '" />');
-                            var spanDescription = $("<span><b>" + data[k].Title + '<b />: ' + data[k].Description + "</span>");
+                            var img = $('<img id="theImg" height="200" width="200" src="' + data[k].ImageLocation + '" />');
+                            img.css({
+                                paddingTop: '20px',
+                            })
+                            var spanDescription = $("<span><b>" + data[k].Title + "</span>");
                             spanDescription.addClass('descriptionSpan')
                             a.append(img);
                             a.append(spanDescription);
                             div.append(a);
-                            div.css('background-color', '#d9d9d9')
-                            div.addClass('col-md-4')
-                            div.css('bckground-color', '#3385ff')
-                            $('#grid').prepend(div);
-                            $('#grid >div> span').css('position', 'relative')
+                            div.addClass('col-md-12')
+                            div.css({
+                                backgroundColor: '#d9d9d9',
+                                paddingLeft: '10%'
+                            })
+                            div.append("<hr />")
+                            $('.hotItems').append(div);
                         }
                     }
-                    $('#grid > div> a > span.descriptionSpan').css({
-                        position: 'absolute',
-                        width: '280px',
-                        bottom: '25px',
-                        marginLeft: '32px',
-                        backgroundColor: "#000",
-                        left: '0px',
-                        fontSize: '18px',
-                        padding: '6px',
-                        color: 'white',
-                        filter: 'alpha(opacity=70)',
-                        opacity: '0.7'
-                    });
                     $('#grid > div> a > img').css({
                         padding: '15px'
                     });
 
-                },
-                error: function (data) {
-                    alert(data.error);
+                    $('.refreshBtn').click(function () {
+                        $('#categoriesDDL').val(''),
+                        $('#regionsDDL').val(''),
+                        $('#cityDDL').val(''),
+                        $.each($('#radioGroup input'), function (index, el) {
+                            if ($(el).is(':checked')) {
+                                $(el).prop('checked', '');
+                            }
+                        })
+                        $('#myonoffswitch').prop('checked', '')
+
+                        $('#fromValueInput').val(''),
+                        $('#toValueInput').val('')
+                    });
                 }
-            }).then(function () {
+            },
+            failure: function (errMsg) {
+                
+            }
+        })
+        }
+
+        function filter(options) {
+            var filterOptions = new Array;
+            for (var prop in options) {
+                filterOptions.push(options[prop]);
+            }
+
+            if (options != null) {
+                filterOptions = JSON.stringify(options[0])
+            }
+
+            jQuery.ajax({
+                type: "POST",
+                url: "@Url.Action("Filter")",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: filterOptions,
+                success: function (data) {
+                    {
+                        $('#grid').html('');
+                        for (var k in data) {
+                            if (data.hasOwnProperty(k)) {
+                                var div = $('<div></div>')
+                                var a = $("<a></a>");
+                                var rows = Number(data.length) / 3;
+                                a.attr("href", "/item/ShowItem?itemId=" + data[k].ItemId);
+                                var img = $('<img id="theImg" height="350" width="350" src="' + data[k].ImageLocation + '" />');
+                                var spanDescription = $("<span><b>" + data[k].Title + '<b />: ' + data[k].Description + "</span>");
+                                spanDescription.addClass('descriptionSpan')
+                                a.append(img);
+                                a.append(spanDescription);
+                                div.append(a);
+                                div.css('background-color', '#d9d9d9')
+                                div.addClass('col-md-4')
+                                div.css('bckground-color', '#3385ff')
+                                $('#grid').prepend(div);
+                                $('#grid >div> span').css('position', 'relative')
+                            }
+                        }
+                        $('#grid > div> a > span.descriptionSpan').css({
+                            position: 'absolute',
+                            width: '280px',
+                            bottom: '25px',
+                            marginLeft: '32px',
+                            backgroundColor: "#000",
+                            left: '0px',
+                            fontSize: '18px',
+                            padding: '6px',
+                            color: 'white',
+                            filter: 'alpha(opacity=70)',
+                            opacity: '0.7'
+                        });
+
+                        $('#grid > div> a > img').css({
+                            padding: '15px'
+                        });
+
+                        $('.refreshBtn').click(function () {
+                            $('#categoriesDDL').val(''),
+                            $('#regionsDDL').val(''),
+                            $('#cityDDL').val(''),
+                            $.each($('#radioGroup input'), function (index, el) {
+                                if ($(el).is(':checked')) {
+                                    $(el).prop('checked', '');
+                                }
+                            })
+                            $('#myonoffswitch').prop('checked', '')
+
+                            $('#fromValueInput').val(''),
+                            $('#toValueInput').val('')
+                        });
+                    }
+                },
+                failure: function (errMsg) {
+                
+            }
+        })
+            .then(function () {
                 $('#searchBtn').on('click', function () {
-                    debugger;
                     var size;
                     $.each($('#radioGroup input'), function (index, el) {
                         if ($(el).is(':checked')) {
@@ -134,15 +206,16 @@
                         }
                     })
 
+
                     var filterOptions = [
                         {
-                            categoryId: $('#categoriesDDL').val(),
-                            regionId: $('#regionsDDL').val(),
-                            cityId: $('#cityDDL').val(),
-                            lostFound: $('#myonoffswitch').val(),
-                            sizeType: size,
-                            fromValue: $('#fromValueInput').val(),
-                            toValue: $('#toValueInput').val()
+                            CategoryId: $('#categoriesDDL').val(),
+                            RegionId: $('#regionsDDL').val(),
+                            CityId: $('#cityDDL').val(),
+                            LostFound: $('#myonoffswitch').is("checked"),
+                            SizeType: size,
+                            FromValue: $('#fromValueInput').val(),
+                            ToValue: $('#toValueInput').val()
                         }
                     ];
                     filter(filterOptions);
@@ -152,6 +225,7 @@
 
         $(document).ready(function () {
             filter();
+            hotItems();
         });
     </script>
 }

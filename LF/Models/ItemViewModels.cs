@@ -69,4 +69,15 @@ namespace LF.Models
         public string UserId { get; set; }
         public string UserName { get; set; }
     }
+
+    public class FilterModel
+    {
+        public string CategoryId { get; set; }
+        public string CityId { get; set; }
+        public string FromValue { get; set; }
+        public string LostFound { get; set; }
+        public string RegionId { get; set; }
+        public string SizeType { get; set; }
+        public string ToValue { get; set; }              
+    }
 }

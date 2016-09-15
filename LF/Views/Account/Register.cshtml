@@ -16,25 +16,25 @@
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.Email,"Електронна поща", new { @class = "col-md-2 control-label", @autocomplete = "on" })
-        <div class="col-md-10">
+        <div class="col-md-4">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Password, "Парола", new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        <div class="col-md-4">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control", @autocomplete = "on" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, "Повтори парола", new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        <div class="col-md-4">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @autocomplete = "on" })
         </div>
     </div>
     <div class="form-group">
         @Html.Label("Държава", new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        <div class="col-md-4">
             @Html.HiddenFor(x => x.RegionId)
             @Html.HiddenFor(x => x.CityId)
             @Html.DropDownListFor(model => model.CountryId, Model.Countries, " --Избери-- ", new { @class = "form-control", @Id = "CountriesDDL" })
@@ -52,6 +52,6 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval"),
-    @Scripts.Render("~/bundles/customBundleScript"),
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/customBundleScript")
 }

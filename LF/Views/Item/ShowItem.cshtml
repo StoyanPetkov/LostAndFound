@@ -36,11 +36,11 @@
             @{
                 if (Model.UserId == User.Identity.GetUserId())
                 {
-                    <span class="btn btn-warning">
-                        @Html.ActionLink("Изтрии", "Delete", "Item", new { id = Model.ItemId }, new { @id="deleteBtn"})
+                    <span class="btn btn-danger">
+                        @Html.ActionLink("Изтрии", "Delete", "Item", new { id = Model.ItemId }, new { @class="myItemsBtn"})
                     </span>
-                    <span class="btn btn-default">
-                        @Html.ActionLink("Редактирай", "Edit", "Item", new { id = Model.ItemId }, null)
+                    <span class="btn btn-warning">
+                        @Html.ActionLink("Редактирай", "Edit", "Item", new { id = Model.ItemId }, new { @class = "myItemsBtn" })
                     </span>
 
                 }

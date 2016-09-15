@@ -30,7 +30,7 @@ namespace LF.DataAccess
         #region Item
         public async Task<List<Item>> ItemsGetAll()
         {
-            return await _itemRepository.GetAll();
+            return await _itemRepository.GetAll(filter: x=> !x.IsDeleted);
         }
 
         public async Task ItemEdit(Item item)
