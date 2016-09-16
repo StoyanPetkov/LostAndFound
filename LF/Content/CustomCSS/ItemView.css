@@ -5,6 +5,9 @@ textarea {
     resize: none;
 }
 
+.black-background {background-color:#000000;}
+.white {color:#ffffff;}
+
 .createItemLeft {
     position: relative;
     float: left;

@@ -188,7 +188,7 @@ namespace LF.Controllers
         [AllowAnonymous]
         public ActionResult GetRegions(string countryId)
         {
-            RegisterDropDownListVM model = new RegisterDropDownListVM("Regions");
+            RegisterDropDownListVM model = new RegisterDropDownListVM("Регион");
             model.AddItem("Пловдив", new Guid("6db90c57a1a9427badb5025e23ecf740"));
             model.AddItem("София", new Guid("09596a7c4d2c40219795291062af527c"));
 
@@ -198,7 +198,7 @@ namespace LF.Controllers
         [AllowAnonymous]
         public ActionResult GetCities(string regionId)
         {
-            RegisterDropDownListVM model = new RegisterDropDownListVM("Cities");
+            RegisterDropDownListVM model = new RegisterDropDownListVM("Град");
 
             model.AddItem("Пловдив", new Guid("600cbfa38cb04217b118d34580bbebf6"));
             model.AddItem("София", new Guid("c29d966a5fda4f7197dc2d6f25875ca0"));
@@ -229,14 +229,13 @@ namespace LF.Controllers
                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         var callbackUrl = Url.Action("ConfirmEmail", "Account",
                            new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                        await UserManager.SendEmailAsync(user.Id, "Confirm your account",
-                           "Please confirm your account by clicking " + callbackUrl);
+                        await UserManager.SendEmailAsync(user.Id, "Потвърди регистрация",
+                           "Моля потвърдете регистрацията като кликнете на " + callbackUrl);
 
                         // Uncomment to debug locally 
                         TempData["ViewBagLink"] = callbackUrl;
 
-                        ViewBag.Message = "Check your email and confirm your account, you must be confirmed "
-                                        + "before you can log in.";
+                        ViewBag.Message = "Моля проверете вашата електронна поща и потвърдете регистрацията.";
 
                         return View("Info");
                         //return RedirectToAction("Index", "Home");

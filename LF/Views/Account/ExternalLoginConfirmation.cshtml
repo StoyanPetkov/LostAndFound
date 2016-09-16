@@ -21,7 +21,7 @@
     </p>
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+        <div class="col-md-3">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "readonly" })
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
@@ -38,6 +38,6 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval"),
-    @Scripts.Render("~/bundles/registerBundleScript"),
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/registerBundleScript")
 }

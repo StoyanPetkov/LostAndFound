@@ -21,6 +21,9 @@ namespace LF.Controllers
     public class ItemController : AsyncController
     {
         private LFDataManager _dataManager;
+        private string userCountry = null;
+        private string userCity = null;
+        private string userRegion = null;
 
         public ItemController()
         {
@@ -28,7 +31,7 @@ namespace LF.Controllers
         }
 
         #region Ajax
-
+        
         public Task<JsonResult> GetSideMenu()
         {
             MenuModel model = new MenuModel();
@@ -86,11 +89,17 @@ namespace LF.Controllers
             return Json(models, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
         public async Task<JsonResult> HotItems()
         {
             List<ShowItemsVM> models = new List<ShowItemsVM>();
-            List<Item> items = await _dataManager.HotItemsGet();
+            Guid? cityId = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = _dataManager.UserGetById(User.Identity.GetUserId()).Result;
+                cityId = user.CityId.HasValue ? user.CityId : null;
+            }
+           
+            List<Item> items = await _dataManager.HotItemsGet(cityId);
 
             if (items.Count < 2)
             {
@@ -126,55 +135,9 @@ namespace LF.Controllers
         [HttpPost]
         public async Task<JsonResult> Filter(FilterModel filterOptions)
         {
-            List<ShowItemsVM> models = new List<ShowItemsVM>();
-            List<Item> items = await _dataManager.ItemsGetAll();
-
-            //filtering
-            if (!IsAnyNullOrEmpty(filterOptions))
-            {
-                string categoryId = filterOptions.CategoryId ?? null;
-                string cityId = filterOptions.CityId ?? null;
-                string regionId = filterOptions.RegionId ?? null;
-                string fromValue = filterOptions.FromValue ?? null;
-                string toValue = filterOptions.FromValue ?? null;
-                string inputValue = filterOptions.InputValue ?? null;
-                string itemSize = filterOptions.SizeType ?? null;
-                items = items.Where(x => (inputValue != null ? x.ItemName.Contains(inputValue.Trim()) : true) &&
-                                         (categoryId != null ? x.CategoryId == new Guid(categoryId) : true) &&
-                                         (cityId != null ? x.CityId == new Guid(cityId) : true) &&
-                                         (regionId != null ? x.City.RegionId == new Guid(regionId) : true) &&
-                                         (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true) &&
-                                         (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true) &&
-                                         x.IsLost == !Convert.ToBoolean(filterOptions.LostFound) &&
-                                         (itemSize != null ? x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
-                                                    filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
-                                                    filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0) : true)
-                                        )
-                                        .ToList();
-
-                //items = items.Where(x => (inputValue != null ? x.ItemName.Contains(inputValue.Trim()) : true)).ToList();
-
-                //items = items.Where(x => (categoryId != null ? x.CategoryId == new Guid(categoryId) : true)).ToList();
-
-                //items = items.Where(x => (cityId != null ? x.CityId == new Guid(cityId) : true)).ToList();
-
-                //items = items.Where(x => (regionId != null ? x.City.RegionId == new Guid(regionId) : true)).ToList();
-
-                //items = items.Where(x => (fromValue != null ? x.RewardValue >= float.Parse(filterOptions.FromValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
-
-                //items = items.Where(x => (toValue != null ? x.RewardValue <= float.Parse(filterOptions.ToValue, CultureInfo.InvariantCulture.NumberFormat) : true)).ToList();
-
-                //bool lost = !Convert.ToBoolean(filterOptions.LostFound);
-
-                //items = items.Where(x => (x.IsLost == lost)).ToList();
-
-                //items = items.Where(x => (itemSize != null ? x.Size == (filterOptions.SizeType == Sizes.Малък.ToString() ? (int)Sizes.Малък :
-                //                                    filterOptions.SizeType == Sizes.Среден.ToString() ? (int)Sizes.Среден :
-                //                                    filterOptions.SizeType == Sizes.Голям.ToString() ? (int)Sizes.Среден : 0) : true)).ToList();
-
-
-            }
-
+            List<Item> items = new List<Item>();
+            items = await _dataManager.FilterItems(filterOptions);
+            List <ShowItemsVM> models = new List<ShowItemsVM>();
             foreach (var item in items.OrderBy(x=> x.CreatedDate))
             {
                 ShowItemsVM model = new ShowItemsVM();
@@ -206,6 +169,7 @@ namespace LF.Controllers
             return View(model);
         }
 
+        [Authorize]
         public ActionResult MyItems()
         {
             CreateItemVM model = new CreateItemVM();
@@ -220,14 +184,15 @@ namespace LF.Controllers
         }
 
         // GET: Item/Create
+        [Authorize]
         public ActionResult CreateItem()
         {
             CreateItemVM model = new CreateItemVM();
             model.UserId = Guid.Parse(User.Identity.GetUserId());
             model.OwnerEmail = User.Identity.GetUserName();
-            model.Countries = GetCountries(null);
-            model.Regions = GetRegions(null);
-            model.Cities = new List<SelectListItem>();//GetCities();
+            model.Countries = GetCountries(userCountry);
+            model.Regions = GetRegions(userRegion);
+            model.Cities = new List<SelectListItem>();
             model.Categories = GetCategories(null);
             model.Sizes = GetSizes(0);
 
@@ -235,6 +200,7 @@ namespace LF.Controllers
         }
 
         // POST: Item/Create
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateItem(CreateItemVM model)
         {
@@ -317,6 +283,7 @@ namespace LF.Controllers
         }
 
         // GET: Item/Edit
+        [Authorize]
         public ActionResult Edit(Guid id)
         {
             CreateItemVM model = new CreateItemVM();
@@ -327,6 +294,7 @@ namespace LF.Controllers
             return View(model);
         }
 
+        [Authorize]
         // POST: Item/Edit
         [HttpPost]
         public async Task<ActionResult> Edit(CreateItemVM model)
@@ -425,6 +393,7 @@ namespace LF.Controllers
             }
         }
 
+        [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
             try

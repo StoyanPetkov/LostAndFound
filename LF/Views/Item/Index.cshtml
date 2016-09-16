@@ -1,14 +1,17 @@
 ﻿@model LF.Models.CreateItemVM
 
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/CustomCSS/itemView.css")" />
-
 <div class="row main-content">
-    <div class="col-md-12" id="topMenu">
-        @Html.ActionLink("Нова обява", "CreateItem", "Item", new { @class = "btn btn-default" })
-        @Html.ActionLink("Мои обяви", "MyItems", "Item", new { @class = "btn btn-default" })
-    </div>
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+            <div class="col-md-12" id="topMenu">
+                @Html.ActionLink("Нова обява", "CreateItem", "Item", new { @class = "btn btn-primary" })
+                @Html.ActionLink("Мои обяви", "MyItems", "Item", new { @class = "btn btn-success" })
+            </div>
+        }
+    }
     <div id="inputSection" class="col-md-12">
-        <!-- Use any element to open the sidenav -->
         <div>
             <span id="filterMenu"><i class="fa fa-filter fa-4x" aria-hidden="true" onclick="openNav()"></i></span>
         </div>
@@ -16,13 +19,12 @@
             <input class="form-control input-lg" id="inputdefault" type="text" placeholder="Търсене">
         </div>
         <div class="col-md-1">
-            @*col-md-offset-1*@
             <span class="btn btn-primary fa fa-search fa-2x" aria-hidden="true" id="searchBtn">Намери</span>
         </div>
     </div>
     <div id="itemGrid" class="col-md-9">
     </div>
-    <div class="hotItems col-md-3 text-center" style="background-color:indianred">
+    <div class="hotItems col-md-3 text-center">
     </div>
 </div>
 
@@ -60,7 +62,7 @@
 
         function hotItems() {
             jQuery.ajax({
-                type: "POST",
+                type: "Get",
                 url: "@Url.Action("HotItems")",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
@@ -68,6 +70,7 @@
                     {
                         debugger;
                         $('.hotItems').html('');
+                        $('.hotItems').css('background-color', 'indianred');
                         var div = $('<div><h2"><b class="text-center">Горещи обяви</b></h4></div>')
                         div.css('margin','10px')
                         $('.hotItems').prepend(div);

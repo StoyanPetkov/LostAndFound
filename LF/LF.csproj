@@ -201,6 +201,7 @@
     <Compile Include="DataAccess\Repositories\CountryRepository.cs" />
     <Compile Include="DataAccess\Repositories\ItemRepository.cs" />
     <Compile Include="DataAccess\Repositories\RegionRepository.cs" />
+    <Compile Include="DataAccess\Repositories\UserRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

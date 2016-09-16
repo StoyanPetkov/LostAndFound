@@ -19,7 +19,7 @@
                 }
             },
             error: function (data) {
-                alert(data.error);
+                //alert(data.error);
             }
         });
     });
@@ -54,13 +54,13 @@
                         }
                     },
                     error: function (data) {
-                        alert(data.error);
+                        //alert(data.error);
                     }
                 });
             }));
         },
         error: function (data) {
-            alert(data);
+            //alert(data);
         }
     });
 

@@ -7,7 +7,26 @@
     <title>@ViewBag.Title - Lost &amp; Found</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <script src=" https://use.fontawesome.com/2de92cc6c8.js "> </script> 
+    <script src=" https://use.fontawesome.com/2de92cc6c8.js "> </script>
+    @*<style>
+        .nav ul:nth-child(1) {
+            border-left: 3px solid #ff4949;
+            border-right: 3px solid #ff4949;
+        }
+
+        .nav li:nth-child(2) {
+            border-left: 3px solid #ff4949;
+            border-right: 3px solid #ff4949;
+        }
+
+        .nav li:nth-child(1) {
+            border-left: 3px solid #ff4949;
+        }
+
+        .nav li:nth-child(3) {
+             border-right: 3px solid #ff4949;
+        }
+    </style>*@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,14 +40,11 @@
                 @Html.ActionLink("Изгубено & Намерено", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                @if (User.Identity.GetUserId() != null)
-                {
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Обяви", "Index", "Item")</li>
-                        <li>@Html.ActionLink("Информация", "About", "Home")</li>
-                        <li>@Html.ActionLink("Контакти", "Contact", "Home")</li>
-                    </ul>
-                }
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Обяви", "Index", "Item")</li>
+                    <li>@Html.ActionLink("•Информация•", "About", "Home")</li>
+                    <li>@Html.ActionLink("Контакти", "Contact", "Home")</li>
+                </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

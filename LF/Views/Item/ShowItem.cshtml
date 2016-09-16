@@ -34,8 +34,8 @@
         <div class="">
             <h2 class="text-center"><u><i><b>@Model.Title</b></i></u></h2>
             @{
-                if (Model.UserId == User.Identity.GetUserId())
-                {
+                    if (User.Identity.IsAuthenticated && Model.UserId == User.Identity.GetUserId())
+                    {
                     <span class="btn btn-danger">
                         @Html.ActionLink("Изтрии", "Delete", "Item", new { id = Model.ItemId }, new { @class="myItemsBtn"})
                     </span>

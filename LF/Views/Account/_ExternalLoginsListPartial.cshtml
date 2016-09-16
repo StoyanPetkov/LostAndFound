@@ -33,9 +33,22 @@
                             socialBtnClass = "btn-google-plus";
                         }
                         <button type="submit" @*class=@socialBtnClass*@ class="btn btn-default"  id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+
                     }
                 </p>
             </div>
         }
     }
 }
+@{
+    @*var google = loginProviders.Where(x => x.Caption == "Google").First();
+    var facebook = loginProviders.Where(x => x.Caption == "Facebook").First();
+
+    <a class="btn btn-block btn-social btn-block" id="@google.AuthenticationType" name="provider" value="@google.AuthenticationType" title="Log in using your @google.Caption account">
+        <span class="fa fa-google-plus-official fa-4x">@google.AuthenticationType</span>
+    </a>
+                    <a class="btn btn-block btn-social btn-block" id="@facebook.AuthenticationType" name="provider" value="@facebook.AuthenticationType" title="Log in using your @facebook.Caption account">
+                        <span class="fa fa-facebook-official fa-4x">@facebook.AuthenticationType</span>
+                    </a>*@
+}
+
